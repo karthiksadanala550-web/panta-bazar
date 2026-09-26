@@ -1,0 +1,15 @@
+{
+  "name": "farmer2retail-market-api",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Local proxy for Government of India mandi prices used by Farmer2Retail",
+  "main": "market-api-server.js",
+  "scripts": {
+    "start": "node market-api-server.js"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.7",
+    "express": "^5.1.0"
+  }
+}

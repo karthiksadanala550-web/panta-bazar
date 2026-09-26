@@ -1,0 +1,28 @@
+# Farmer2Retail Government Market API
+
+This connects the existing Crop Details price box to the Government of India mandi-price dataset published through data.gov.in.
+
+## One-time setup
+
+1. Install Node.js LTS if it is not already installed.
+2. Get your API key from data.gov.in.
+3. In this project folder, copy `.env.example` to `.env`.
+4. Put your API key in `.env`:
+   DATA_GOV_IN_API_KEY=your_key_here
+5. Open a terminal in this folder and run:
+   npm install
+6. Start the backend:
+   npm start
+7. Keep that terminal open.
+8. Open `index_market_api.html` with Live Server.
+9. Enter a crop name and location such as:
+   Tomato
+   Village, district, Telangana
+
+The website will call:
+http://localhost:3000/api/market-price
+
+The source dataset reports wholesale prices in rupees per quintal. The backend converts the modal price to rupees per kg for the website and also returns the source date and mandi.
+
+Source:
+https://data.gov.in/resource/current-daily-price-various-commodities-various-markets-mandi
