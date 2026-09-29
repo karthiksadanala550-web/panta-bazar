@@ -240,456 +240,1954 @@ footer{background:var(--gd);color:#dce7dd;padding:42px 8% 18px}.footergrid{displ
 <script src="supabase.js"></script>
 
 <script>
-const T={
-en:{
-home:"Home",crops:"Crops",how:"How It Works",sell:"Sell Your Crop",
-kicker:"CONNECTING FARMS WITH MARKETS",heroTitle:'Fresh From The Farm.<br><span>Direct To You.</span>',
-heroText:"Buy fresh crops directly from farmers and help farmers reach retailers and customers without unnecessary intermediaries.",
-search:"Search",explore:"Explore Fresh Crops →",sellCrop:"Sell Your Crop ↗",
-discover:"DISCOVER FRESH PRODUCE",looking:"What are you looking for?",browse:"Browse farmer-listed crops and produce.",
-viewAll:"View All Crops ↗",all:"All Crops",paddy:"Paddy",veg:"Vegetables",fruit:"Fruits",milk:"Milk",listings:"fresh listings"
-},
-te:{
-home:"హోమ్",crops:"పంటలు",how:"ఎలా పని చేస్తుంది",sell:"మీ పంటను అమ్మండి",
-kicker:"రైతులను మార్కెట్‌తో కలుపుతున్నాం",heroTitle:'పొలం నుంచి తాజా పంట.<br><span>నేరుగా మీకు.</span>',
-heroText:"రైతుల నుంచి నేరుగా తాజా పంటలను కొనండి. రైతులు రిటైలర్లు మరియు కస్టమర్లకు నేరుగా చేరేలా చేయండి.",
-search:"వెతకండి",explore:"తాజా పంటలు చూడండి →",sellCrop:"మీ పంటను అమ్మండి ↗",
-discover:"తాజా పంటలను చూడండి",looking:"మీకు ఏమి కావాలి?",browse:"రైతులు నమోదు చేసిన పంటలను చూడండి.",
-viewAll:"అన్ని పంటలు ↗",all:"అన్ని పంటలు",paddy:"వరి",veg:"కూరగాయలు",fruit:"పండ్లు",milk:"పాలు",listings:"తాజా లిస్టింగ్‌లు"
-}};
+/* ============================================================
+   CHANGE 1: COMPREHENSIVE CROP / PRODUCT IMAGE DATABASE
+   ============================================================ */
+const CROP_IMAGES = {
+  // VEGETABLES
+  tomato: "https://images.unsplash.com/photo-1546094096-0df4bcaaa337?auto=format&fit=crop&w=900&q=85",
+  potato: "https://images.unsplash.com/photo-1518977676601-b53f82aba655?auto=format&fit=crop&w=900&q=85",
+  onion: "https://images.unsplash.com/photo-1618512496248-a07fe83aa8cb?auto=format&fit=crop&w=900&q=85",
+  brinjal: "https://images.unsplash.com/photo-1615484477778-ca3b77940c25?auto=format&fit=crop&w=900&q=85",
+  eggplant: "https://images.unsplash.com/photo-1615484477778-ca3b77940c25?auto=format&fit=crop&w=900&q=85",
+  carrot: "https://images.unsplash.com/photo-1598170845058-32b9d6a5da37?auto=format&fit=crop&w=900&q=85",
+  cabbage: "https://images.unsplash.com/photo-1594282486552-05b4d80fbb9f?auto=format&fit=crop&w=900&q=85",
+  cauliflower: "https://images.unsplash.com/photo-1568702846914-96b305d2aaeb?auto=format&fit=crop&w=900&q=85",
+  okra: "https://images.unsplash.com/photo-1425543103986-22abb7d7e8d2?auto=format&fit=crop&w=900&q=85",
+  ladyfinger: "https://images.unsplash.com/photo-1425543103986-22abb7d7e8d2?auto=format&fit=crop&w=900&q=85",
+  chilli: "https://images.unsplash.com/photo-1588252303782-cb80119abd6d?auto=format&fit=crop&w=900&q=85",
+  spinach: "https://images.unsplash.com/photo-1576045057995-568f588f82fb?auto=format&fit=crop&w=900&q=85",
+  coriander: "https://images.unsplash.com/photo-1526346698789-22fd84314424?auto=format&fit=crop&w=900&q=85",
+  cilantro: "https://images.unsplash.com/photo-1526346698789-22fd84314424?auto=format&fit=crop&w=900&q=85",
+  mint: "https://images.unsplash.com/photo-1628556270448-4d4e4148e1b1?auto=format&fit=crop&w=900&q=85",
+  bottlegourd: "https://images.unsplash.com/photo-1603048588665-791ca8aea617?auto=format&fit=crop&w=900&q=85",
+  bittergourd: "https://images.unsplash.com/photo-1598170845058-32b9d6a5da37?auto=format&fit=crop&w=900&q=85",
+  ridgegourd: "https://images.unsplash.com/photo-1598170845058-32b9d6a5da37?auto=format&fit=crop&w=900&q=85",
+  snakegourd: "https://images.unsplash.com/photo-1598170845058-32b9d6a5da37?auto=format&fit=crop&w=900&q=85",
+  gourd: "https://images.unsplash.com/photo-1603048588665-791ca8aea617?auto=format&fit=crop&w=900&q=85",
+  pumpkin: "https://images.unsplash.com/photo-1509622905150-fa66d3906e09?auto=format&fit=crop&w=900&q=85",
+  beans: "https://images.unsplash.com/photo-1567375698348-5d9d5ae4caa0?auto=format&fit=crop&w=900&q=85",
+  peas: "https://images.unsplash.com/photo-1587735243615-c03f25aaff15?auto=format&fit=crop&w=900&q=85",
+  beetroot: "https://images.unsplash.com/photo-1593105544559-ecb03bf76f82?auto=format&fit=crop&w=900&q=85",
+  radish: "https://images.unsplash.com/photo-1585246292023-45e41bfb8e20?auto=format&fit=crop&w=900&q=85",
+  turnip: "https://images.unsplash.com/photo-1594282486552-05b4d80fbb9f?auto=format&fit=crop&w=900&q=85",
+  sweetpotato: "https://images.unsplash.com/photo-1596097635121-14b63a7fe7ed?auto=format&fit=crop&w=900&q=85",
+  drumstick: "https://images.unsplash.com/photo-1601493700631-2b16ec4b4716?auto=format&fit=crop&w=900&q=85",
+  capsicum: "https://images.unsplash.com/photo-1563565375-f3fdfdbefa83?auto=format&fit=crop&w=900&q=85",
+  bellpepper: "https://images.unsplash.com/photo-1563565375-f3fdfdbefa83?auto=format&fit=crop&w=900&q=85",
+  broccoli: "https://images.unsplash.com/photo-1459411552884-841db9b3cc2a?auto=format&fit=crop&w=900&q=85",
+  lettuce: "https://images.unsplash.com/photo-1622206151226-18ca2c9ab4a1?auto=format&fit=crop&w=900&q=85",
+  cucumber: "https://images.unsplash.com/photo-1449300079323-02e209d9d3a6?auto=format&fit=crop&w=900&q=85",
+  garlic: "https://images.unsplash.com/photo-1540148426945-6cf22a6b2571?auto=format&fit=crop&w=900&q=85",
+  ginger: "https://images.unsplash.com/photo-1615485500704-8e990f9900f7?auto=format&fit=crop&w=900&q=85",
+  corn: "https://images.unsplash.com/photo-1551754655-cd27e38d2076?auto=format&fit=crop&w=900&q=85",
+  sweetcorn: "https://images.unsplash.com/photo-1551754655-cd27e38d2076?auto=format&fit=crop&w=900&q=85",
+  mushroom: "https://images.unsplash.com/photo-1504545102780-26774c1bb073?auto=format&fit=crop&w=900&q=85",
+  clusterbeans: "https://images.unsplash.com/photo-1567375698348-5d9d5ae4caa0?auto=format&fit=crop&w=900&q=85",
+  ivygourd: "https://images.unsplash.com/photo-1603048588665-791ca8aea617?auto=format&fit=crop&w=900&q=85",
+  rawbanana: "https://images.unsplash.com/photo-1571771894821-ce9b6c11b08e?auto=format&fit=crop&w=900&q=85",
+  rawpapaya: "https://images.unsplash.com/photo-1617112848923-cc2234396a8d?auto=format&fit=crop&w=900&q=85",
 
-let lang="en",cat="All",term="",cart=[],selectedProduct=null;
+  // FRUITS
+  mango: "https://images.unsplash.com/photo-1553279768-865429fa0078?auto=format&fit=crop&w=900&q=85",
+  banana: "https://images.unsplash.com/photo-1571771894821-ce9b6c11b08e?auto=format&fit=crop&w=900&q=85",
+  apple: "https://images.unsplash.com/photo-1560806887-1e4cd0b6cbd6?auto=format&fit=crop&w=900&q=85",
+  orange: "https://images.unsplash.com/photo-1547514701-42782101795e?auto=format&fit=crop&w=900&q=85",
+  papaya: "https://images.unsplash.com/photo-1617112848923-cc2234396a8d?auto=format&fit=crop&w=900&q=85",
+  guava: "https://images.unsplash.com/photo-1536511132770-e5058c7e8c46?auto=format&fit=crop&w=900&q=85",
+  watermelon: "https://images.unsplash.com/photo-1563114773-84221bd62daa?auto=format&fit=crop&w=900&q=85",
+  grapes: "https://images.unsplash.com/photo-1537640538966-79f369143f8f?auto=format&fit=crop&w=900&q=85",
+  pomegranate: "https://images.unsplash.com/photo-1615485290382-441e4d049cb5?auto=format&fit=crop&w=900&q=85",
+  pineapple: "https://images.unsplash.com/photo-1550258987-190a2d41a8ba?auto=format&fit=crop&w=900&q=85",
+  coconut: "https://images.unsplash.com/photo-1580984969071-a8da8c33e1cc?auto=format&fit=crop&w=900&q=85",
+  lemon: "https://images.unsplash.com/photo-1590502593747-42a996133562?auto=format&fit=crop&w=900&q=85",
+  sweetlime: "https://images.unsplash.com/photo-1590502593747-42a996133562?auto=format&fit=crop&w=900&q=85",
+  mosambi: "https://images.unsplash.com/photo-1590502593747-42a996133562?auto=format&fit=crop&w=900&q=85",
+  sapota: "https://images.unsplash.com/photo-1632159741530-614e3f89cdca?auto=format&fit=crop&w=900&q=85",
+  chikoo: "https://images.unsplash.com/photo-1632159741530-614e3f89cdca?auto=format&fit=crop&w=900&q=85",
+  custardapple: "https://images.unsplash.com/photo-1605395464929-6e3161cc5aa7?auto=format&fit=crop&w=900&q=85",
+  jackfruit: "https://images.unsplash.com/photo-1528825871115-3581a5e31137?auto=format&fit=crop&w=900&q=85",
+  strawberry: "https://images.unsplash.com/photo-1464965911861-746a04b4bca6?auto=format&fit=crop&w=900&q=85",
+  kiwi: "https://images.unsplash.com/photo-1585032226651-759b368d7246?auto=format&fit=crop&w=900&q=85",
+  peach: "https://images.unsplash.com/photo-1595124216334-09f30e37a09e?auto=format&fit=crop&w=900&q=85",
+  pear: "https://images.unsplash.com/photo-1514756331096-242fdeb70d4a?auto=format&fit=crop&w=900&q=85",
+  plum: "https://images.unsplash.com/photo-1502736893146-a6d2332ef4f0?auto=format&fit=crop&w=900&q=85",
+  dragonfruit: "https://images.unsplash.com/photo-1527325678964-54921661f888?auto=format&fit=crop&w=900&q=85",
+  muskmelon: "https://images.unsplash.com/photo-1571575173700-afb9492e6a50?auto=format&fit=crop&w=900&q=85",
+  fig: "https://images.unsplash.com/photo-1601379327928-bedfaf9da2d0?auto=format&fit=crop&w=900&q=85",
+  dates: "https://images.unsplash.com/photo-1593904308879-0b5e09867bc3?auto=format&fit=crop&w=900&q=85",
+  avocado: "https://images.unsplash.com/photo-1523049673857-eb18f1d7b578?auto=format&fit=crop&w=900&q=85",
+  litchi: "https://images.unsplash.com/photo-1577735759315-7c23a6d899a8?auto=format&fit=crop&w=900&q=85",
+  amla: "https://images.unsplash.com/photo-1536511132770-e5058c7e8c46?auto=format&fit=crop&w=900&q=85",
+  jamun: "https://images.unsplash.com/photo-1502736893146-a6d2332ef4f0?auto=format&fit=crop&w=900&q=85",
+  tamarind: "https://images.unsplash.com/photo-1593904308879-0b5e09867bc3?auto=format&fit=crop&w=900&q=85",
 
-const demoProducts=[
-{id:1,cat:"Vegetables",name:"Fresh Tomatoes",te:"తాజా టమాటాలు",location:"Andhra Pradesh",qty:"500 kg",price:28,unit:"kg",farmer:"Ramesh",phone:"919876543210",img:"https://images.unsplash.com/photo-1546094096-0df4bcaaa337?auto=format&fit=crop&w=900&q=85"},
-{id:2,cat:"Paddy",name:"Fresh Paddy",te:"తాజా వరి",location:"West Godavari",qty:"1200 kg",price:24,unit:"kg",farmer:"Srinivas",phone:"919876543211",img:"https://images.unsplash.com/photo-1536633051934-0f4c5b5d8f3d?auto=format&fit=crop&w=900&q=85"},
-{id:3,cat:"Fruits",name:"Fresh Mangoes",te:"తాజా మామిడిపండ్లు",location:"Andhra Pradesh",qty:"300 kg",price:65,unit:"kg",farmer:"Lakshmi",phone:"919876543212",img:"https://images.unsplash.com/photo-1553279768-865429fa0078?auto=format&fit=crop&w=900&q=85"},
-{id:4,cat:"Milk",name:"Fresh Milk",te:"తాజా పాలు",location:"Tadepalligudem",qty:"80 L",price:52,unit:"L",farmer:"Anitha",phone:"919876543213",img:"https://images.unsplash.com/photo-1550583724-b2692b85b150?auto=format&fit=crop&w=900&q=85"}
-];
+  // GRAINS / PULSES
+  paddy: "https://images.unsplash.com/photo-1536304993881-ff6e9eefa2a6?auto=format&fit=crop&w=900&q=85",
+  rice: "https://images.unsplash.com/photo-1586201375761-83865001e31c?auto=format&fit=crop&w=900&q=85",
+  maize: "https://images.unsplash.com/photo-1551754655-cd27e38d2076?auto=format&fit=crop&w=900&q=85",
+  wheat: "https://images.unsplash.com/photo-1574323347407-f5e1ad6d020b?auto=format&fit=crop&w=900&q=85",
+  groundnut: "https://images.unsplash.com/photo-1567892320421-1c657571ea4a?auto=format&fit=crop&w=900&q=85",
+  peanut: "https://images.unsplash.com/photo-1567892320421-1c657571ea4a?auto=format&fit=crop&w=900&q=85",
+  blackgram: "https://images.unsplash.com/photo-1613844237701-8f3664fc2eff?auto=format&fit=crop&w=900&q=85",
+  greengram: "https://images.unsplash.com/photo-1613844237701-8f3664fc2eff?auto=format&fit=crop&w=900&q=85",
+  redgram: "https://images.unsplash.com/photo-1613844237701-8f3664fc2eff?auto=format&fit=crop&w=900&q=85",
+  bengalgram: "https://images.unsplash.com/photo-1515543904320-3ce5e5780368?auto=format&fit=crop&w=900&q=85",
+  chickpeas: "https://images.unsplash.com/photo-1515543904320-3ce5e5780368?auto=format&fit=crop&w=900&q=85",
+  toordal: "https://images.unsplash.com/photo-1613844237701-8f3664fc2eff?auto=format&fit=crop&w=900&q=85",
+  moongdal: "https://images.unsplash.com/photo-1613844237701-8f3664fc2eff?auto=format&fit=crop&w=900&q=85",
+  uraddal: "https://images.unsplash.com/photo-1613844237701-8f3664fc2eff?auto=format&fit=crop&w=900&q=85",
+  dal: "https://images.unsplash.com/photo-1613844237701-8f3664fc2eff?auto=format&fit=crop&w=900&q=85",
+  bajra: "https://images.unsplash.com/photo-1586201375800-7dd0cb396aff?auto=format&fit=crop&w=900&q=85",
+  jowar: "https://images.unsplash.com/photo-1586201375800-7dd0cb396aff?auto=format&fit=crop&w=900&q=85",
+  ragi: "https://images.unsplash.com/photo-1586201375800-7dd0cb396aff?auto=format&fit=crop&w=900&q=85",
 
-let products=[...demoProducts];
-
-function getCropImage(category){
- const images={
-   Paddy:"https://images.unsplash.com/photo-1536304993881-ff6e9eefa2a6?auto=format&fit=crop&w=900&q=85",
-   Vegetables:"https://images.unsplash.com/photo-1546094096-0df4bcaaa337?auto=format&fit=crop&w=900&q=85",
-   Fruits:"https://images.unsplash.com/photo-1553279768-865429fa0078?auto=format&fit=crop&w=900&q=85",
-   Milk:"https://images.unsplash.com/photo-1550583724-b2692b85b150?auto=format&fit=crop&w=900&q=85",
-   Other:"https://images.unsplash.com/photo-1498837167922-ddd27525d352?auto=format&fit=crop&w=900&q=85"
- };
- return images[category]||images.Other;
-}
-
-async function loadProductsFromSupabase(){
- try{
-   const {data,error}=await supabaseClient
-     .from("products")
-     .select("id,farmer_id,crop_name,category,quantity,unit,selling_price,location,description,image_url,status,created_at")
-     .eq("status","active")
-     .order("created_at",{ascending:false});
-
-   if(error){
-     console.error("Supabase products error:",error);
-     return;
-   }
-
-   const liveProducts=(data||[]).map(p=>({
-     id:p.id,
-     cat:p.category,
-     name:p.crop_name,
-     te:p.crop_name,
-     location:p.location||"Location not provided",
-     qty:`${p.quantity} ${p.unit||"kg"}`,
-     price:Number(p.selling_price),
-     unit:p.unit||"kg",
-     farmer:"Farmer",
-     phone:"",
-     img:p.image_url||getCropImage(p.category),
-     description:p.description||"",
-     farmer_id:p.farmer_id
-   }));
-
-   products=[...liveProducts,...demoProducts];
-   render();
-   console.log("Live Supabase products loaded:",liveProducts.length);
- }catch(err){
-   console.error("Could not load Supabase products:",err);
- }
-}
-
-function render(){
- let a=products.filter(p=>(cat==="All"||p.cat===cat)&&(!term||`${p.name} ${p.te} ${p.cat} ${p.location} ${p.farmer}`.toLowerCase().includes(term.toLowerCase())));
- const sort=document.getElementById("sort").value;
- if(sort==="low")a.sort((x,y)=>x.price-y.price);
- if(sort==="high")a.sort((x,y)=>y.price-x.price);
- document.getElementById("count").textContent=a.length;
- const box=document.getElementById("products");box.innerHTML="";
- a.forEach(p=>box.insertAdjacentHTML("beforeend",`
- <article class="product">
-   <div class="pimg" style="background-image:url('${p.img}')"><span class="ptag">${p.cat}</span><button class="heart">♡</button></div>
-   <div class="pbody">
-     <h3>${lang==="te"?p.te:p.name}</h3>
-     <div class="loc">📍 ${p.location}</div>
-     <div class="pmeta">
-       <div><small>AVAILABLE</small><b>${p.qty}</b></div>
-       <div style="text-align:right"><small>FARMER PRICE</small><b class="price">₹${p.price}/${p.unit}</b></div>
-     </div>
-     <div class="pfoot"><span class="farmer">👨‍🌾 ${p.farmer}</span><button class="view" data-buy="${p.id}">Buy / Add to Cart →</button></div>
-   </div>
- </article>`));
-}
-
-function setLanguage(){
- const d=T[lang];
- document.querySelectorAll("[data-i18n]").forEach(e=>e.innerHTML=d[e.dataset.i18n]||e.innerHTML);
- document.getElementById("langBtn").textContent=lang==="en"?"తెలుగు":"English";
- document.getElementById("topLang").textContent=lang==="en"?"English":"తెలుగు";
- const s=document.getElementById("search");
- s.placeholder=lang==="en"?s.dataset.placeholderEn:s.dataset.placeholderTe;
- document.documentElement.lang=lang==="en"?"en":"te";
- render();
-}
-document.getElementById("langBtn").onclick=()=>{lang=lang==="en"?"te":"en";setLanguage();toast(lang==="te"?"తెలుగు భాష ఎంచుకోబడింది":"English selected")};
-document.getElementById("footerLang").onclick=e=>{e.preventDefault();document.getElementById("langBtn").click()};
-document.getElementById("footerChat2")?.addEventListener("click",e=>{e.preventDefault();document.getElementById("chatPanel").classList.add("open")});
-document.querySelectorAll(".cat").forEach(b=>b.onclick=()=>{document.querySelectorAll(".cat").forEach(x=>x.classList.remove("active"));b.classList.add("active");cat=b.dataset.cat;render()});
-document.getElementById("allBtn").onclick=()=>{cat="All";document.querySelectorAll(".cat").forEach(x=>x.classList.toggle("active",x.dataset.cat==="All"));term="";document.getElementById("search").value="";render()};
-document.getElementById("sort").onchange=render;
-document.getElementById("searchBtn").onclick=()=>{term=document.getElementById("search").value.trim();render();document.getElementById("crops").scrollIntoView({behavior:"smooth"})};
-document.getElementById("search").onkeydown=e=>{if(e.key==="Enter")document.getElementById("searchBtn").click()};
-document.getElementById("products").onclick=e=>{
- const heart=e.target.closest(".heart");
- if(heart){heart.textContent=heart.textContent==="♡"?"♥":"♡";return}
- const b=e.target.closest("[data-buy]");
- if(!b)return;
- selectedProduct=products.find(p=>p.id==b.dataset.buy);
- openCart(selectedProduct);
+  // DAIRY
+  milk: "https://images.unsplash.com/photo-1550583724-b2692b85b150?auto=format&fit=crop&w=900&q=85",
+  curd: "https://images.unsplash.com/photo-1488477181946-6428a0291777?auto=format&fit=crop&w=900&q=85",
+  yogurt: "https://images.unsplash.com/photo-1488477181946-6428a0291777?auto=format&fit=crop&w=900&q=85",
+  buttermilk: "https://images.unsplash.com/photo-1572443490709-e57345f45939?auto=format&fit=crop&w=900&q=85",
+  paneer: "https://images.unsplash.com/photo-1631452180519-c014fe946bc7?auto=format&fit=crop&w=900&q=85",
+  ghee: "https://images.unsplash.com/photo-1631452180539-96aca7d48617?auto=format&fit=crop&w=900&q=85"
 };
 
-function toast(msg){
- const t=document.getElementById("toast");t.textContent=msg;t.classList.add("show");
- clearTimeout(window.toastTimer);window.toastTimer=setTimeout(()=>t.classList.remove("show"),2600);
-}
-
-function voiceInput(callback){
- const R=window.SpeechRecognition||window.webkitSpeechRecognition;
- if(!R){toast(lang==="te"?"ఈ బ్రౌజర్‌లో వాయిస్ సపోర్ట్ లేదు. Chrome/Edge ఉపయోగించండి.":"Voice recognition needs Chrome/Edge with microphone permission.");return}
- const r=new R();
- r.lang=lang==="te"?"te-IN":"en-IN";
- r.interimResults=false;r.maxAlternatives=1;
- toast(lang==="te"?"వింటున్నాను... మాట్లాడండి":"Listening... speak now");
- r.onresult=e=>callback(e.results[0][0].transcript);
- r.onerror=e=>toast((lang==="te"?"వాయిస్ ఇన్‌పుట్ విఫలమైంది: ":"Voice input failed: ")+(e.error||"microphone permission"));
- r.start();
-}
-document.getElementById("voiceSearch").onclick=()=>voiceInput(t=>{document.getElementById("search").value=t;term=t;render()});
-document.getElementById("voiceTop").onclick=()=>voiceInput(t=>{document.getElementById("search").value=t;term=t;render();document.getElementById("crops").scrollIntoView({behavior:"smooth"})});
-
-document.getElementById("menuBtn").onclick=()=>{
- const n=document.querySelector("nav");n.style.display=n.style.display==="flex"?"none":"flex";n.style.position="absolute";n.style.top="78px";n.style.left="5%";n.style.right="5%";n.style.padding="12px";n.style.background="#fff";n.style.flexDirection="column";n.style.borderRadius="14px";
+const CROP_SYNONYMS = {
+  "eggplant": "brinjal",
+  "aubergine": "brinjal",
+  "lady finger": "okra",
+  "ladyfinger": "okra",
+  "bhindi": "okra",
+  "bell pepper": "capsicum",
+  "bellpepper": "capsicum",
+  "cilantro": "coriander",
+  "kothimeera": "coriander",
+  "dhaniya": "coriander",
+  "chikoo": "sapota",
+  "chiku": "sapota",
+  "sweet lime": "sweetlime",
+  "mosambi": "sweetlime",
+  "peanut": "groundnut",
+  "ground nuts": "groundnut",
+  "peanuts": "groundnut",
+  "maize": "corn",
+  "makka": "corn",
+  "corn": "corn",
+  "yogurt": "curd",
+  "dahi": "curd",
+  "perugu": "curd",
+  "bottle gourd": "bottlegourd",
+  "sorakaya": "bottlegourd",
+  "lauki": "bottlegourd",
+  "bitter gourd": "bittergourd",
+  "kakarakaya": "bittergourd",
+  "karela": "bittergourd",
+  "ridge gourd": "ridgegourd",
+  "beerakaya": "ridgegourd",
+  "turai": "ridgegourd",
+  "snake gourd": "snakegourd",
+  "potlakaya": "snakegourd",
+  "ivy gourd": "ivygourd",
+  "dondakaya": "ivygourd",
+  "tindora": "ivygourd",
+  "sweet corn": "corn",
+  "green chilli": "chilli",
+  "green chili": "chilli",
+  "red chilli": "chilli",
+  "red chili": "chilli",
+  "mirchi": "chilli",
+  "green peas": "peas",
+  "matar": "peas",
+  "batani": "peas",
+  "cluster beans": "clusterbeans",
+  "goruchikkudu": "clusterbeans",
+  "raw banana": "rawbanana",
+  "aratikaya": "rawbanana",
+  "raw papaya": "rawpapaya",
+  "boppayikaya": "rawpapaya",
+  "sweet potato": "sweetpotato",
+  "chilagada": "sweetpotato",
+  "dragon fruit": "dragonfruit",
+  "custard apple": "custardapple",
+  "sitaphal": "custardapple",
+  "seethaphal": "custardapple",
+  "black gram": "blackgram",
+  "minumulu": "blackgram",
+  "green gram": "greengram",
+  "pesalu": "greengram",
+  "red gram": "redgram",
+  "kandulu": "redgram",
+  "bengal gram": "bengalgram",
+  "senagalu": "bengalgram",
+  "toor dal": "toordal",
+  "kandi pappu": "toordal",
+  "moong dal": "moongdal",
+  "pesara pappu": "moongdal",
+  "urad dal": "uraddal",
+  "minapa pappu": "uraddal",
+  "chana": "chickpeas",
+  "chickpea": "chickpeas",
+  "amla": "amla",
+  "usiri": "amla",
+  "jamun": "jamun",
+  "neredu": "jamun",
+  "tamarind": "tamarind",
+  "chintha": "tamarind",
+  "paddy": "paddy",
+  "rice": "rice",
+  "vari": "paddy",
+  "dhan": "paddy",
+  "wheat": "wheat",
+  "godhumalu": "wheat",
+  "milk": "milk",
+  "paalu": "milk",
+  "buttermilk": "buttermilk",
+  "majjiga": "buttermilk",
+  "chaas": "buttermilk",
+  "paneer": "paneer",
+  "ghee": "ghee",
+  "neyyi": "ghee"
 };
 
-/* HERO SLIDESHOW: cattle -> vegetables -> paddy -> fruits -> milk, one image every second */
-const heroSlides=[
- "https://images.unsplash.com/photo-1500595046743-cd271d694d30?auto=format&fit=crop&w=1100&q=85",
- "https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&w=1100&q=85",
- "https://images.unsplash.com/photo-1490474418585-ba9bad8fd0ea?auto=format&fit=crop&w=1100&q=85",
- "https://images.unsplash.com/photo-1550583724-b2692b85b150?auto=format&fit=crop&w=1100&q=85"
-];
-const heroPhoto=document.getElementById("heroPhoto"),slideDots=document.getElementById("slideDots");
-heroSlides.forEach((_,i)=>{const d=document.createElement("span");d.className="slide-dot"+(i===0?" active":"");slideDots.appendChild(d)});
-let heroIndex=0;
-heroPhoto.style.backgroundImage=`url("${heroSlides[0]}")`;
-setInterval(()=>{
- heroIndex=(heroIndex+1)%heroSlides.length;
- heroPhoto.classList.add("fade");
- setTimeout(()=>{
-   heroPhoto.style.backgroundImage=`url("${heroSlides[heroIndex]}")`;
-   heroPhoto.classList.remove("fade");
-   [...slideDots.children].forEach((d,i)=>d.classList.toggle("active",i===heroIndex));
- },180);
-},2000);
+const CAT_IMAGES = {
+  Paddy: "https://images.unsplash.com/photo-1536304993881-ff6e9eefa2a6?auto=format&fit=crop&w=900&q=85",
+  Vegetables: "https://images.unsplash.com/photo-1540420773420-3366772f4999?auto=format&fit=crop&w=900&q=85",
+  Fruits: "https://images.unsplash.com/photo-1619566636858-adf3ef46400b?auto=format&fit=crop&w=900&q=85",
+  Milk: "https://images.unsplash.com/photo-1550583724-b2692b85b150?auto=format&fit=crop&w=900&q=85",
+  Other: "https://images.unsplash.com/photo-1498837167922-ddd27525d352?auto=format&fit=crop&w=900&q=85"
+};
 
-/* SELLER FLOW - OTP REMOVED */
-const sellModal=document.getElementById("sellModal");
-function openSell(){
-  sellModal.style.display="grid";
+function getCropImage(cropName, category) {
+  if (!cropName && !category) return CAT_IMAGES.Other;
+  const raw = String(cropName || "").toLowerCase().trim();
+  const clean = raw.replace(/[^a-z0-9\s]/g, " ");
+
+  // Direct lookup
+  for (const [key, url] of Object.entries(CROP_IMAGES)) {
+    const reg = new RegExp("\\b" + key + "s?\\b", "i");
+    if (reg.test(clean)) return url;
+  }
+
+  // Synonym lookup
+  for (const [syn, targetKey] of Object.entries(CROP_SYNONYMS)) {
+    if (clean.includes(syn)) {
+      if (CROP_IMAGES[targetKey]) return CROP_IMAGES[targetKey];
+    }
+  }
+
+  // Substring search on key
+  for (const [key, url] of Object.entries(CROP_IMAGES)) {
+    if (clean.includes(key)) return url;
+  }
+
+  // Fallback to category image
+  return CAT_IMAGES[category] || CAT_IMAGES.Other;
+}
+
+/* ============================================================
+   CHANGE 3: COMPREHENSIVE DYNAMIC TELUGU TRANSLATION SYSTEM
+   ============================================================ */
+const TELUGU_DICT = {
+  // Common adjectives & prefixes
+  "fresh": "తాజా",
+  "organic": "సేంద్రీయ",
+  "local": "స్థానిక",
+  "farm": "పొలం",
+  "pure": "స్వచ్ఛమైన",
+  "raw": "పచ్చి",
+  "sweet": "తీపి",
+  "red": "ఎరుపు",
+  "green": "పచ్చి",
+  "white": "తెలుపు",
+  "black": "నలుపు",
+  "yellow": "పసుపు",
+  "dry": "ఎండిన",
+  "dried": "ఎండిన",
+  "natural": "సహజ",
+
+  // Vegetables
+  "tomato": "టమాటా",
+  "tomatoes": "టమాటాలు",
+  "potato": "బంగాళాదుంప",
+  "potatoes": "బంగాళాదుంపలు",
+  "onion": "ఉల్లిపాయ",
+  "onions": "ఉల్లిపాయలు",
+  "brinjal": "వంకాయ",
+  "brinjals": "వంకాయలు",
+  "eggplant": "వంకాయ",
+  "carrot": "క్యారెట్",
+  "carrots": "క్యారెట్లు",
+  "cabbage": "క్యాబేజీ",
+  "cauliflower": "గోబీ పువ్వు",
+  "okra": "బెండకాయ",
+  "lady finger": "బెండకాయ",
+  "ladyfinger": "బెండకాయ",
+  "chilli": "మిరపకాయ",
+  "chillies": "మిరపకాయలు",
+  "chili": "మిరపకాయ",
+  "green chilli": "పచ్చి మిరపకాయ",
+  "red chilli": "ఎర్ర మిరపకాయ",
+  "spinach": "పాలకూర",
+  "coriander": "కొత్తిమీర",
+  "cilantro": "కొత్తిమీర",
+  "mint": "పుదీనా",
+  "bottle gourd": "సొరకాయ",
+  "bottlegourd": "సొరకాయ",
+  "bitter gourd": "కాకరకాయ",
+  "bittergourd": "కాకరకాయ",
+  "ridge gourd": "బీరకాయ",
+  "ridgegourd": "బీరకాయ",
+  "snake gourd": "పొట్లకాయ",
+  "snakegourd": "పొట్లకాయ",
+  "gourd": "సొరకాయ",
+  "pumpkin": "గుమ్మడికాయ",
+  "beans": "చిక్కుడుకాయలు",
+  "bean": "చిక్కుడు",
+  "green peas": "పచ్చి బఠాణీలు",
+  "peas": "బఠాణీలు",
+  "beetroot": "బీట్‌రూట్",
+  "radish": "ముల్లంగి",
+  "turnip": "టర్నిప్",
+  "sweet potato": "చిలగడదుంప",
+  "sweetpotato": "చిలగడదుంప",
+  "drumstick": "మునగకాయ",
+  "drumsticks": "మునగకాయలు",
+  "capsicum": "క్యాప్సికం",
+  "bell pepper": "క్యాప్సికం",
+  "bellpepper": "క్యాప్సికం",
+  "broccoli": "బ్రోకలీ",
+  "lettuce": "లెట్యూస్",
+  "cucumber": "దోసకాయ",
+  "garlic": "వెల్లుల్లి",
+  "ginger": "అల్లం",
+  "sweet corn": "స్వీట్ కార్న్",
+  "corn": "మొక్కజొన్న",
+  "mushroom": "పుట్టగొడుగులు",
+  "mushrooms": "పుట్టగొడుగులు",
+  "cluster beans": "గోరుచిక్కుడు",
+  "ivy gourd": "దొండకాయ",
+  "raw banana": "అరటికాయ",
+  "raw papaya": "బొప్పాయికాయ",
+
+  // Fruits
+  "mango": "మామిడిపండు",
+  "mangoes": "మామిడిపండ్లు",
+  "banana": "అరటిపండు",
+  "bananas": "అరటిపండ్లు",
+  "apple": "ఆపిల్",
+  "apples": "ఆపిల్స్",
+  "orange": "నారింజ",
+  "oranges": "నారింజ పండ్లు",
+  "papaya": "బొప్పాయి",
+  "guava": "జామపండు",
+  "watermelon": "పుచ్చకాయ",
+  "grapes": "ద్రాక్ష",
+  "pomegranate": "దానిమ్మ",
+  "pineapple": "అనాసపండు",
+  "coconut": "కొబ్బరికాయ",
+  "coconuts": "కొబ్బరికాయలు",
+  "lemon": "నిమ్మకాయ",
+  "lemons": "నిమ్మకాయలు",
+  "sweet lime": "మోసంబి",
+  "sweetlime": "మోసంబి",
+  "mosambi": "మోసంబి",
+  "sapota": "సపోట",
+  "chikoo": "సపోట",
+  "custard apple": "సీతాఫలం",
+  "jackfruit": "పనసపండు",
+  "strawberry": "స్ట్రాబెర్రీ",
+  "strawberries": "స్ట్రాబెర్రీలు",
+  "kiwi": "కివీ",
+  "peach": "పీచ్",
+  "pear": "పేరు",
+  "plum": "ప్లమ్",
+  "dragon fruit": "డ్రాగన్ ఫ్రూట్",
+  "dragonfruit": "డ్రాగన్ ఫ్రూట్",
+  "muskmelon": "ఖర్బూజ",
+  "fig": "అంజీర్",
+  "dates": "ఖర్జూరం",
+  "avocado": "అవకాడో",
+  "litchi": "లీచి",
+  "amla": "ఉసిరికాయ",
+  "jamun": "నేరేడు పండు",
+  "tamarind": "చింతపండు",
+
+  // Grains & Pulses
+  "paddy": "వరి",
+  "rice": "బియ్యం",
+  "wheat": "గోధుమలు",
+  "maize": "మొక్కజొన్న",
+  "groundnut": "వేరుశనగ",
+  "groundnuts": "వేరుశనగలు",
+  "peanut": "వేరుశనగ",
+  "peanuts": "వేరుశనగలు",
+  "black gram": "మినుములు",
+  "green gram": "పెసలు",
+  "red gram": "కందులు",
+  "bengal gram": "శనగలు",
+  "chickpeas": "శనగలు",
+  "toor dal": "కందిపప్పు",
+  "moong dal": "పెసరపప్పు",
+  "urad dal": "మినప్పప్పు",
+  "dal": "పప్పు",
+  "bajra": "సజ్జలు",
+  "jowar": "జొన్నలు",
+  "ragi": "రాగులు",
+
+  // Dairy
+  "milk": "పాలు",
+  "curd": "పెరుగు",
+  "yogurt": "పెరుగు",
+  "buttermilk": "మజ్జిగ",
+  "paneer": "పన్నీర్",
+  "ghee": "నెయ్యి",
+
+  // Units
+  "kg": "కేజీ",
+  "kgs": "కేజీలు",
+  "l": "లీటర్",
+  "litre": "లీటరు",
+  "litres": "లీటర్లు",
+  "quintal": "క్వింటాల్",
+  "bags": "సంచులు"
+};
+
+// Fallback phonetic transliteration for any unmapped English words
+function transliterateEnToTe(text) {
+  if (!text) return "";
+  const words = text.toLowerCase().split(/\s+/);
+  const outWords = words.map(word => {
+    if (TELUGU_DICT[word]) return TELUGU_DICT[word];
+    let res = "";
+    let i = 0;
+    const initialVowels = {
+      "aa": "ఆ", "ee": "ఈ", "oo": "ఊ", "ai": "ఐ", "au": "ఔ", "ou": "ఔ",
+      "a": "అ", "e": "ఎ", "i": "ఇ", "o": "ఒ", "u": "ఉ"
+    };
+    const cons = {
+      "sh": "ష", "th": "త", "ch": "చ", "kh": "ఖ", "gh": "ఘ", "ph": "ఫ",
+      "bh": "భ", "dh": "ధ", "zh": "జ", "k": "క", "g": "గ", "c": "క",
+      "j": "జ", "t": "ట", "d": "డ", "n": "న", "p": "ప", "b": "బ",
+      "m": "మ", "y": "య", "r": "ర", "l": "ల", "v": "వ", "w": "వ",
+      "s": "స", "h": "హ", "f": "ఫ", "z": "జ", "q": "క", "x": "క్స్"
+    };
+    const matras = {
+      "aa": "ా", "ee": "ీ", "oo": "ూ", "ai": "ై", "au": "ౌ", "ou": "ౌ",
+      "a": "", "e": "ె", "i": "ి", "o": "ొ", "u": "ు"
+    };
+
+    let isStart = true;
+    while (i < word.length) {
+      if (isStart) {
+        let vMatch = null;
+        for (const v of ["aa", "ee", "oo", "ai", "au", "ou", "a", "e", "i", "o", "u"]) {
+          if (word.startsWith(v, i)) { vMatch = v; break; }
+        }
+        if (vMatch) {
+          res += initialVowels[vMatch];
+          i += vMatch.length;
+          isStart = false;
+          continue;
+        }
+      }
+      let cMatch = null;
+      for (const c of ["sh", "th", "ch", "kh", "gh", "ph", "bh", "dh", "zh", "k", "g", "c", "j", "t", "d", "n", "p", "b", "m", "y", "r", "l", "v", "w", "s", "h", "f", "z", "q", "x"]) {
+        if (word.startsWith(c, i)) { cMatch = c; break; }
+      }
+      if (cMatch) {
+        res += cons[cMatch];
+        i += cMatch.length;
+        isStart = false;
+        let vMatch = null;
+        for (const v of ["aa", "ee", "oo", "ai", "au", "ou", "a", "e", "i", "o", "u"]) {
+          if (word.startsWith(v, i)) { vMatch = v; break; }
+        }
+        if (vMatch) {
+          res += matras[vMatch];
+          i += vMatch.length;
+        }
+        continue;
+      }
+      res += word[i];
+      i++;
+      isStart = false;
+    }
+    return res;
+  });
+  return outWords.join(" ");
+}
+
+function translateCropToTelugu(englishText) {
+  if (!englishText) return "";
+  const cleaned = String(englishText).trim();
+  const lower = cleaned.toLowerCase();
+
+  // Exact dictionary match
+  if (TELUGU_DICT[lower]) return TELUGU_DICT[lower];
+
+  // Try matching words in phrase (e.g. "Fresh Tomatoes" -> "తాజా టమాటాలు")
+  const words = lower.split(/\s+/);
+  let translatedWords = [];
+  let foundAny = false;
+
+  for (let w of words) {
+    if (TELUGU_DICT[w]) {
+      translatedWords.push(TELUGU_DICT[w]);
+      foundAny = true;
+    } else {
+      // Try stripping trailing 's' or 'es'
+      let singular = w.replace(/e?s$/, "");
+      if (TELUGU_DICT[singular]) {
+        translatedWords.push(TELUGU_DICT[singular]);
+        foundAny = true;
+      } else {
+        // Transliterate unknown word dynamically to Telugu script!
+        const translit = transliterateEnToTe(w);
+        translatedWords.push(translit || w);
+      }
+    }
+  }
+
+  return translatedWords.join(" ");
+}
+
+/* ============================================================
+   TRANSLATION STRINGS FOR ENTIRE APPLICATION
+   ============================================================ */
+const T = {
+  en: {
+    topBar: "🌾 Direct from farmers • Transparent marketplace",
+    home: "Home",
+    crops: "Crops",
+    how: "How It Works",
+    sell: "Sell Your Crop",
+    kicker: "CONNECTING FARMS WITH MARKETS",
+    heroTitle: 'Fresh From The Farm.<br><span>Direct To You.</span>',
+    heroText: "Buy fresh crops directly from farmers and help farmers reach retailers and customers without unnecessary intermediaries.",
+    search: "Search",
+    explore: "Explore Fresh Crops →",
+    sellCrop: "Sell Your Crop ↗",
+    searchPlaceholder: "Search crops, location or farmer...",
+    trust1: "✓ Farmer-direct listings",
+    trust2: "✓ Local produce",
+    trust3: "✓ Voice search",
+    trust4: "✓ Admin chat",
+    heroBadge: "🌾 FARMER → BUYER",
+    heroCardKicker: "DIRECT MARKETPLACE",
+    heroCardTitle: "From Farmer<br><span>To Retailer / Customer</span>",
+    heroCardText: "Fresh vegetables, paddy, fruits and dairy products from farmers, shown one by one.",
+    statDirect: "Direct", statDirectSub: "Connection",
+    statFresh: "Fresh", statFreshSub: "Produce",
+    statVoice: "Voice", statVoiceSub: "Assisted",
+    discover: "DISCOVER FRESH PRODUCE",
+    looking: "What are you looking for?",
+    browse: "Browse farmer-listed crops and produce.",
+    viewAll: "View All Crops ↗",
+    all: "All Crops", allSub: "Everything",
+    paddy: "Paddy", paddySub: "Rice crops",
+    veg: "Vegetables", vegSub: "Fresh & local",
+    fruit: "Fruits", fruitSub: "Seasonal produce",
+    milk: "Milk", milkSub: "Fresh dairy",
+    listings: "fresh listings",
+    sortRecent: "Recently Listed",
+    sortLow: "Price: Low to High",
+    sortHigh: "Price: High to Low",
+    availableLabel: "AVAILABLE",
+    farmerPriceLabel: "FARMER PRICE",
+    buyBtn: "Buy / Add to Cart →",
+    farmerPrefix: "👨‍🌾 ",
+
+    // Reference section
+    refKicker: "GOVERNMENT / MARKET PRICE",
+    refTitle: "Today's reference price can be shown with the crop.",
+    refDesc: "When the crop is selected or entered, the frontend requests the latest verified government/market reference price from the backend price endpoint. This prevents old hard-coded rates from being presented as today's official price.",
+    refCropDefault: "Select a crop",
+    refSourceDefault: "Waiting for crop selection",
+    refGovLabel: "Today's reference price",
+    refYourPriceLabel: "Your selling price",
+    refDateDefault: "Source/date will appear after backend connection.",
+
+    // How it works
+    howKicker: "SIMPLE FOR EVERYONE",
+    howTitle: "How Farmer2Retail works",
+    howDesc: "A simple path from the farm to the person who needs the produce.",
+    step1Title: "Farmer Lists Crop",
+    step1Desc: "Add crop, quantity, price and location using normal typing or voice.",
+    step2Title: "Buyer Finds Crop",
+    step2Desc: "Search categories and choose the quantity you need.",
+    step3Title: "Cart & Payment",
+    step3Desc: "Add quantity to cart and continue to the payment step.",
+
+    // Sell section
+    sellKicker: "FOR FARMERS",
+    sellTitle: "Have crops to sell?<br><span>Reach buyers directly.</span>",
+    sellDesc: "First verify your name and mobile number. After that, enter crop details step-by-step.",
+    feat1Title: "Phone-first verification",
+    feat1Desc: "Name and mobile number are collected before crop details.",
+    feat2Title: "Today's reference price",
+    feat2Desc: "Government/market price is requested when the crop is selected.",
+    feat3Title: "Voice-assisted details",
+    feat3Desc: "Speak crop information instead of typing everything.",
+    startSellingBtn: "Start Selling →",
+
+    // Footer
+    footerBrandDesc: "Connecting farmers with retailers and customers through a simpler direct marketplace.",
+    footerMarketplace: "Marketplace",
+    footerBrowseCrops: "Browse Crops",
+    footerSellCrop: "Sell Your Crop",
+    footerSupport: "Support",
+    footerContactAdmin: "Contact Admin",
+    footerReportListing: "Report Listing",
+    footerLangTitle: "Language",
+    footerChatAdmin: "Chat with Admin",
+    footerCopy: "© 2026 Farmer2Retail. Demo frontend.",
+    footerBackendNote: "Backend/API integrations are ready to be connected.",
+
+    // Chat
+    chatTitle: "Farmer2Retail Admin",
+    chatSub: "Send a text or voice message",
+    chatWelcome: "Hello! How can we help you?",
+    chatPlaceholder: "Type your message...",
+    chatReply: "Message received. Admin reply will be connected through the backend.",
+
+    // Sell Modal
+    sellStep1Kicker: "STEP 1 OF 3",
+    sellStep1Title: "Farmer details",
+    sellStep1Intro: "Enter your name and mobile number before adding your crop details.",
+    lblFarmerName: "Farmer Name", phFarmerName: "Enter your name",
+    lblFarmerPhone: "Mobile Number", phFarmerPhone: "10-digit mobile number",
+    continueBtn: "Continue →",
+    backBtn: "← Back",
+    sellStep2Kicker: "STEP 2 OF 3",
+    sellStep2Title: "Crop details",
+    sellStep2Intro: "Enter the details of the crop you want to sell.",
+    lblCropCat: "Crop Category",
+    lblCropName: "Crop Name", phCropName: "e.g. Tomato",
+    lblCropQty: "Quantity", phCropQty: "e.g. 500 kg",
+    lblCropPrice: "Your Selling Price", phCropPrice: "₹ per kg / litre",
+    lblCropLoc: "Location", phCropLoc: "Village, district, state",
+    lblCropDesc: "Crop Description", phCropDesc: "Freshness, harvest date, etc.",
+    sellGovRefLabel: "Today's government/market reference",
+    sellGovNote: "The latest verified source will be connected through the backend price API.",
+    sellStep3Kicker: "STEP 3 OF 3",
+    sellStep3Title: "Review listing",
+    sellStep3Intro: "Check your crop details before publishing the listing.",
+    sumFarmer: "Farmer", sumPhone: "Mobile", sumCrop: "Crop", sumQty: "Quantity", sumPrice: "Price", sumLoc: "Location",
+    publishListingBtn: "Publish Crop Listing →",
+    publishing: "Publishing…",
+    sellSuccessTitle: "Listing created",
+    sellSuccessIntro: "Your crop listing is ready to be submitted to the marketplace.",
+    doneBtn: "Done",
+
+    // Buy Modal
+    buyStep1Kicker: "STEP 1 OF 3",
+    buyStep1Title: "Choose quantity",
+    lblQuantity: "Quantity",
+    lblRefPrice: "Reference price",
+    lblFarmerUnitPrice: "Farmer price",
+    lblTotal: "Total",
+    buyStep2Kicker: "STEP 2 OF 3",
+    buyStep2Title: "Customer & Delivery Details",
+    buyStep2Intro: "Enter your name and delivery location before continuing to payment.",
+    lblBuyerName: "Your Name", phBuyerName: "Enter your full name",
+    lblBuyerLoc: "Your Location / Address", phBuyerLoc: "Village / town, district",
+    lblSellerContact: "Farmer / Seller mobile",
+    callFarmerNote: "Tap the number on a phone to call the farmer directly.",
+    lblDeliveryQuestion: "How will you receive the product?",
+    deliveryOpt1: "Farmer delivers to my location",
+    deliveryOpt2: "Customer pickup from farm / seller location",
+    deliveryOpt3: "Farmer sends through RTC / bus parcel service",
+    continueToPaymentBtn: "Continue to Payment →",
+    buyStep3Kicker: "STEP 3 OF 3",
+    buyStep3Title: "Payment",
+    buyStep3Intro: "Choose how you want to pay after reviewing your order details.",
+    sumCustomer: "Customer",
+    sumDelivery: "Delivery",
+    payOpt1: "UPI / QR Payment",
+    payOpt2: "Pay after pickup / delivery",
+    confirmPaymentBtn: "Confirm Payment →",
+    orderCreatedTitle: "Order request created",
+    orderCreatedIntro: "The farmer's contact and selected delivery method are attached to this order. The real payment gateway/order backend will be connected here.",
+
+    // Cart Bar
+    cartBarItems: "item(s)",
+    checkoutBtn: "Checkout",
+
+    // Validation & Messages
+    onlyAvailableMsg: "Only {qty} {unit} available.",
+    enterFarmerDetailsMsg: "Enter valid farmer name and 10-digit mobile number.",
+    enterCropDetailsMsg: "Enter crop name, quantity and selling price.",
+    enterAllCropFieldsMsg: "Please enter crop name, category, quantity and selling price.",
+    enterBuyerDetailsMsg: "Please enter your name and delivery location.",
+    cropAddedToast: "Crop added to the product list. Login is needed to save it permanently in Supabase.",
+    cropPublishedToast: "Crop listing published successfully!",
+    cropPublishErrorToast: "Could not publish listing: ",
+    wentWrongToast: "Something went wrong while publishing.",
+    listeningToast: "Listening... speak now",
+    voiceFailedToast: "Voice input failed: ",
+    voiceNotSupportedToast: "Voice recognition needs Chrome/Edge with microphone permission.",
+    checkingRateMsg: "Checking live rate…",
+    checkingVerifiedMsg: "Checking verified source…",
+    phoneNotAvailable: "Phone number not available",
+    callText: "📞 Call",
+    deliveryLabels: {
+      farmer_delivery: "Farmer delivery",
+      pickup: "Customer pickup",
+      rtc: "RTC / bus parcel"
+    }
+  },
+
+  te: {
+    topBar: "🌾 రైతుల నుంచి నేరుగా • పారదర్శక మార్కెట్‌ప్లేస్",
+    home: "హోమ్",
+    crops: "పంటలు",
+    how: "ఎలా పని చేస్తుంది",
+    sell: "మీ పంటను అమ్మండి",
+    kicker: "రైతులను మార్కెట్‌తో కలుపుతున్నాం",
+    heroTitle: 'పొలం నుంచి తాజా పంట.<br><span>నేరుగా మీకు.</span>',
+    heroText: "రైతుల నుంచి నేరుగా తాజా పంటలను కొనండి. రైతులు రిటైలర్లు మరియు కస్టమర్లకు నేరుగా చేరేలా చేయండి.",
+    search: "వెతకండి",
+    explore: "తాజా పంటలు చూడండి →",
+    sellCrop: "మీ పంటను అమ్మండి ↗",
+    searchPlaceholder: "పంట, ప్రదేశం లేదా రైతును వెతకండి...",
+    trust1: "✓ రైతు ప్రత్యక్ష లిస్టింగ్‌లు",
+    trust2: "✓ స్థానిక పంట ఉత్పత్తులు",
+    trust3: "✓ వాయిస్ సెర్చ్",
+    trust4: "✓ అడ్మిన్ చాట్",
+    heroBadge: "🌾 రైతు → కొనుగోలుదారు",
+    heroCardKicker: "ప్రత్యక్ష మార్కెట్‌ప్లేస్",
+    heroCardTitle: "రైతు నుంచి<br><span>రిటైలర్ / కస్టమర్ వద్దకు</span>",
+    heroCardText: "రైతుల నుంచి తాజా కూరగాయలు, వరి, పండ్లు మరియు పాల ఉత్పత్తులు ఒక్కొక్కటిగా చూడండి.",
+    statDirect: "ప్రత్యక్ష", statDirectSub: "కనెక్షన్",
+    statFresh: "తాజా", statFreshSub: "ఉత్పత్తులు",
+    statVoice: "వాయిస్", statVoiceSub: "సహాయం",
+    discover: "తాజా పంటలను చూడండి",
+    looking: "మీకు ఏమి కావాలి?",
+    browse: "రైతులు నమోదు చేసిన పంటలను చూడండి.",
+    viewAll: "అన్ని పంటలు ↗",
+    all: "అన్ని పంటలు", allSub: "అన్నీ",
+    paddy: "వరి", paddySub: "వరి పంటలు",
+    veg: "కూరగాయలు", vegSub: "తాజా & స్థానిక",
+    fruit: "పండ్లు", fruitSub: "సీజనల్ పంటలు",
+    milk: "పాలు", milkSub: "తాజా పాల ఉత్పత్తులు",
+    listings: "తాజా లిస్టింగ్‌లు",
+    sortRecent: "ఇటీవల నమోదు చేసినవి",
+    sortLow: "ధర: తక్కువ నుండి ఎక్కువ",
+    sortHigh: "ధర: ఎక్కువ నుండి తక్కువ",
+    availableLabel: "అందుబాటులో",
+    farmerPriceLabel: "రైతు ధర",
+    buyBtn: "కొనండి / కార్ట్‌కు జోడించండి →",
+    farmerPrefix: "👨‍🌾 ",
+
+    // Reference section
+    refKicker: "ప్రభుత్వ / మార్కెట్ ధర",
+    refTitle: "ఈ రోజు అధికారిక ధర పంటతో చూపబడుతుంది.",
+    refDesc: "పంటను ఎంచుకున్నప్పుడు, ఫ్రంటెండ్ బ్యాకెండ్ ప్రైస్ ఎండ్‌పాయింట్ నుండి తాజా మార్కెట్ రిఫరెన్స్ ధరను అభ్యర్థిస్తుంది. పాత రేట్లు చూపించకుండా ఇది నిరోధిస్తుంది.",
+    refCropDefault: "పంటను ఎంచుకోండి",
+    refSourceDefault: "పంట ఎంపిక కోసం వేచి ఉంది",
+    refGovLabel: "ఈ రోజు రిఫరెన్స్ ధర",
+    refYourPriceLabel: "మీ అమ్మకపు ధర",
+    refDateDefault: "బ్యాకెండ్ కనెక్షన్ తర్వాత వివరాలు కనిపిస్తాయి.",
+
+    // How it works
+    howKicker: "అందరికీ సులభం",
+    howTitle: "Farmer2Retail ఎలా పని చేస్తుంది",
+    howDesc: "పొలం నుంచి కొనుగోలుదారుడి వరకు సులభమైన ప్రత్యక్ష మార్గం.",
+    step1Title: "రైతు పంటను నమోదు చేస్తాడు",
+    step1Desc: "సాధారణ టైపింగ్ లేదా వాయిస్ ద్వారా పంట, పరిమాణం, ధర మరియు ప్రదేశం జోడించండి.",
+    step2Title: "కొనుగోలుదారు పంటను ఎంచుకుంటాడు",
+    step2Desc: "వివిధ వర్గాల పంటలను వెతికి మీకు కావాల్సిన పరిమాణాన్ని ఎంచుకోండి.",
+    step3Title: "కార్ట్ & చెల్లింపు",
+    step3Desc: "పరిమాణాన్ని కార్ట్‌కు జోడించి సులభంగా చెల్లింపు పూర్తి చేయండి.",
+
+    // Sell section
+    sellKicker: "రైతుల కోసం",
+    sellTitle: "అమ్మకానికి పంటలు ఉన్నాయా?<br><span>నేరుగా కొనుగోలుదారులను చేరుకోండి.</span>",
+    sellDesc: "ముందుగా మీ పేరు మరియు మొబైల్ నంబర్ నమోదు చేయండి. ఆ తర్వాత పంట వివరాలు దశలవారీగా ఇవ్వండి.",
+    feat1Title: "మొబైల్ ఫోన్ ధృవీకరణ",
+    feat1Desc: "పంట వివరాల కంటే ముందే పేరు మరియు మొబైల్ నంబర్ సేకరించబడతాయి.",
+    feat2Title: "ఈ రోజు మార్కెట్ ధర",
+    feat2Desc: "పంటను ఎంచుకున్నప్పుడు తాజా ప్రభుత్వ/మార్కెట్ ధర తెలుస్తుంది.",
+    feat3Title: "వాయిస్ ద్వారా నమోదు",
+    feat3Desc: "టైప్ చేయడానికి బదులుగా మాట్లాడి పంట సమాచారాన్ని నమోదు చేయండి.",
+    startSellingBtn: "అమ్మడం ప్రారంభించండి →",
+
+    // Footer
+    footerBrandDesc: "సరళమైన ప్రత్యక్ష మార్కెట్‌ప్లేస్ ద్వారా రైతులను రిటైలర్లు మరియు కస్టమర్లతో నేరుగా కలుపుతున్నాం.",
+    footerMarketplace: "మార్కెట్‌ప్లేస్",
+    footerBrowseCrops: "పంటలను చూడండి",
+    footerSellCrop: "మీ పంటను అమ్మండి",
+    footerSupport: "సహాయం",
+    footerContactAdmin: "అడ్మిన్‌ను సంప్రదించండి",
+    footerReportListing: "లిస్టింగ్ రిపోర్ట్ చేయండి",
+    footerLangTitle: "భాష",
+    footerChatAdmin: "అడ్మిన్‌తో చాట్ చేయండి",
+    footerCopy: "© 2026 Farmer2Retail. డెమో ఫ్రంటెండ్.",
+    footerBackendNote: "బ్యాకెండ్/API అనుసంధానానికి సిద్ధంగా ఉంది.",
+
+    // Chat
+    chatTitle: "Farmer2Retail అడ్మిన్",
+    chatSub: "టెక్స్ట్ లేదా వాయిస్ సందేశం పంపండి",
+    chatWelcome: "నమస్కారం! మేము మీకు ఎలా సహాయపడగలం?",
+    chatPlaceholder: "మీ సందేశాన్ని ఇక్కడ టైప్ చేయండి...",
+    chatReply: "సందేశం అందింది. అడ్మిన్ ప్రత్యుత్తరం బ్యాకెండ్ ద్వారా కనెక్ట్ చేయబడుతుంది.",
+
+    // Sell Modal
+    sellStep1Kicker: "స్టెప్ 1 / 3",
+    sellStep1Title: "రైతు వివరాలు",
+    sellStep1Intro: "మీ పంట వివరాలను జోడించే ముందు మీ పేరు మరియు మొబైల్ నంబర్ నమోదు చేయండి.",
+    lblFarmerName: "రైతు పేరు", phFarmerName: "మీ పూర్తి పేరు నమోదు చేయండి",
+    lblFarmerPhone: "మొబైల్ నంబర్", phFarmerPhone: "10-అంకెల మొబైల్ నంబర్",
+    continueBtn: "కొనసాగించండి →",
+    backBtn: "← వెనుకకు",
+    sellStep2Kicker: "స్టెప్ 2 / 3",
+    sellStep2Title: "పంట వివరాలు",
+    sellStep2Intro: "మీరు విక్రయించాలనుకుంటున్న పంట వివరాలను నమోదు చేయండి.",
+    lblCropCat: "పంట వర్గం",
+    lblCropName: "పంట పేరు", phCropName: "ఉదా. టమాటా",
+    lblCropQty: "పరిమాణం", phCropQty: "ఉదా. 500 కేజీ",
+    lblCropPrice: "మీ అమ్మకపు ధర", phCropPrice: "₹ ప్రతి కేజీ / లీటరుకు",
+    lblCropLoc: "ప్రాంతం / ప్రదేశం", phCropLoc: "గ్రామం, మండలం, జిల్లా",
+    lblCropDesc: "పంట వివరణ", phCropDesc: "తాజాదనం, కోత తేదీ మొదలైన వివరాలు",
+    sellGovRefLabel: "ఈ రోజు ప్రభుత్వ/మార్కెట్ రిఫరెన్స్",
+    sellGovNote: "బ్యాకెండ్ ప్రైస్ API ద్వారా ధృవీకరించబడిన తాజా మూలం కనెక్ట్ చేయబడుతుంది.",
+    sellStep3Kicker: "స్టెప్ 3 / 3",
+    sellStep3Title: "లిస్టింగ్ సమీక్ష",
+    sellStep3Intro: "ప్రచురించడానికి ముందు మీ పంట వివరాలను ఒకసారి తనిఖీ చేయండి.",
+    sumFarmer: "రైతు", sumPhone: "మొబైల్", sumCrop: "పంట", sumQty: "పరిమాణం", sumPrice: "ధర", sumLoc: "ప్రదేశం",
+    publishListingBtn: "పంట లిస్టింగ్ ప్రచురించండి →",
+    publishing: "ప్రచురిస్తున్నాం…",
+    sellSuccessTitle: "లిస్టింగ్ సృష్టించబడింది",
+    sellSuccessIntro: "మీ పంట లిస్టింగ్ మార్కెట్‌ప్లేస్‌లో చేర్చడానికి సిద్ధంగా ఉంది.",
+    doneBtn: "పూర్తయింది",
+
+    // Buy Modal
+    buyStep1Kicker: "స్టెప్ 1 / 3",
+    buyStep1Title: "పరిమాణాన్ని ఎంచుకోండి",
+    lblQuantity: "పరిమాణం",
+    lblRefPrice: "రిఫరెన్స్ ధర",
+    lblFarmerUnitPrice: "రైతు ధర",
+    lblTotal: "మొత్తం",
+    buyStep2Kicker: "స్టెప్ 2 / 3",
+    buyStep2Title: "కస్టమర్ & డెలివరీ వివరాలు",
+    buyStep2Intro: "చెల్లింపుకు వెళ్లే ముందు మీ పేరు మరియు డెలివరీ ప్రదేశాన్ని నమోదు చేయండి.",
+    lblBuyerName: "మీ పేరు", phBuyerName: "మీ పూర్తి పేరు నమోదు చేయండి",
+    lblBuyerLoc: "మీ ప్రదేశం / చిరునామా", phBuyerLoc: "గ్రామం / పట్టణం, జిల్లా",
+    lblSellerContact: "రైతు / విక్రేత మొబైల్",
+    callFarmerNote: "రైతుతో నేరుగా మాట్లాడటానికి ఫోన్ నంబర్‌ను నొక్కండి.",
+    lblDeliveryQuestion: "ఉత్పత్తిని మీరు ఎలా అందుకోవాలనుకుంటున్నారు?",
+    deliveryOpt1: "రైతు నా ప్రదేశానికి డెలివరీ చేస్తాడు",
+    deliveryOpt2: "రైతు పొలం / విక్రేత స్థలం వద్ద కస్టమర్ పికప్",
+    deliveryOpt3: "రైతు RTC / బస్ పార్సెల్ సర్వీస్ ద్వారా పంపుతాడు",
+    continueToPaymentBtn: "చెల్లింపుకు కొనసాగించండి →",
+    buyStep3Kicker: "స్టెప్ 3 / 3",
+    buyStep3Title: "చెల్లింపు",
+    buyStep3Intro: "మీ ఆర్డర్ వివరాలను పరిశీలించిన తర్వాత చెల్లింపు విధానాన్ని ఎంచుకోండి.",
+    sumCustomer: "కస్టమర్",
+    sumDelivery: "డెలివరీ విధానం",
+    payOpt1: "UPI / QR చెల్లింపు",
+    payOpt2: "డెలివరీ / పికప్ తర్వాత చెల్లించండి (COD)",
+    confirmPaymentBtn: "ఆర్డర్ నిర్ధారించండి →",
+    orderCreatedTitle: "ఆర్డర్ అభ్యర్థన సృష్టించబడింది",
+    orderCreatedIntro: "రైతు సంప్రదింపు సమాచారం మరియు ఎంచుకున్న డెలివరీ పద్ధతి ఈ ఆర్డర్‌కు జోడించబడ్డాయి.",
+
+    // Cart Bar
+    cartBarItems: "ఐటమ్(లు)",
+    checkoutBtn: "చెకౌట్",
+
+    // Validation & Messages
+    onlyAvailableMsg: "{qty} {unit} మాత్రమే అందుబాటులో ఉంది.",
+    enterFarmerDetailsMsg: "దయచేసి సరైన రైతు పేరు మరియు 10-అంకెల మొబైల్ నంబర్‌ను నమోదు చేయండి.",
+    enterCropDetailsMsg: "దయచేసి పంట పేరు, పరిమాణం మరియు అమ్మకపు ధరను నమోదు చేయండి.",
+    enterAllCropFieldsMsg: "దయచేసి పంట పేరు, వర్గం, పరిమాణం మరియు అమ్మకపు ధరను నమోదు చేయండి.",
+    enterBuyerDetailsMsg: "దయచేసి మీ పేరు మరియు డెలివరీ ప్రదేశాన్ని నమోదు చేయండి.",
+    cropAddedToast: "పంట ఉత్పత్తి జాబితాకు చేర్చబడింది. శాశ్వతంగా సేవ్ చేయడానికి లాగిన్ అవసరం.",
+    cropPublishedToast: "పంట లిస్టింగ్ విజయవంతంగా ప్రచురించబడింది!",
+    cropPublishErrorToast: "లిస్టింగ్ ప్రచురించడంలో లోపం: ",
+    wentWrongToast: "ప్రచురించే సమయంలో ఏదో పొరపాటు జరిగింది.",
+    listeningToast: "వింటున్నాం... ఇప్పుడు మాట్లాడండి",
+    voiceFailedToast: "వాయిస్ ఇన్‌పుట్ విఫలమైంది: ",
+    voiceNotSupportedToast: "ఈ బ్రౌజర్‌లో వాయిస్ సపోర్ట్ లేదు. Chrome/Edge ఉపయోగించండి.",
+    checkingRateMsg: "లైవ్ ధరను తనిఖీ చేస్తున్నాం…",
+    checkingVerifiedMsg: "ధృవీకరించబడిన మూలాన్ని తనిఖీ చేస్తున్నాం…",
+    phoneNotAvailable: "ఫోన్ నంబర్ అందుబాటులో లేదు",
+    callText: "📞 కాల్ చేయండి",
+    deliveryLabels: {
+      farmer_delivery: "రైతు డెలివరీ",
+      pickup: "కస్టమర్ పికప్",
+      rtc: "RTC / బస్ పార్సెల్"
+    }
+  }
+};
+
+let lang = "en", cat = "All", term = "", cart = [], selectedProduct = null;
+
+function L(key, replacements) {
+  let s = (T[lang] && T[lang][key]) || (T.en && T.en[key]) || key;
+  if (replacements) {
+    for (const [k, v] of Object.entries(replacements)) {
+      s = s.replace(new RegExp("\\{" + k + "\\}", "g"), v);
+    }
+  }
+  return s;
+}
+
+/* ============================================================
+   DEMO PRODUCTS WITH CORRECT IMAGES & TELUGU TRANSLATION
+   ============================================================ */
+const demoProducts = [
+  {
+    id: 1,
+    cat: "Vegetables",
+    name: "Fresh Tomatoes",
+    te: "తాజా టమాటాలు",
+    location: "Andhra Pradesh",
+    qty: "500 kg",
+    price: 28,
+    unit: "kg",
+    farmer: "Ramesh",
+    phone: "919876543210",
+    img: getCropImage("Fresh Tomatoes", "Vegetables")
+  },
+  {
+    id: 2,
+    cat: "Paddy",
+    name: "Fresh Paddy",
+    te: "తాజా వరి",
+    location: "West Godavari",
+    qty: "1200 kg",
+    price: 24,
+    unit: "kg",
+    farmer: "Srinivas",
+    phone: "919876543211",
+    img: getCropImage("Fresh Paddy", "Paddy")
+  },
+  {
+    id: 3,
+    cat: "Fruits",
+    name: "Fresh Mangoes",
+    te: "తాజా మామిడిపండ్లు",
+    location: "Andhra Pradesh",
+    qty: "300 kg",
+    price: 65,
+    unit: "kg",
+    farmer: "Lakshmi",
+    phone: "919876543212",
+    img: getCropImage("Fresh Mangoes", "Fruits")
+  },
+  {
+    id: 4,
+    cat: "Milk",
+    name: "Fresh Milk",
+    te: "తాజా పాలు",
+    location: "Tadepalligudem",
+    qty: "80 L",
+    price: 52,
+    unit: "L",
+    farmer: "Anitha",
+    phone: "919876543213",
+    img: getCropImage("Fresh Milk", "Milk")
+  }
+];
+
+let products = [...demoProducts];
+
+/* ============================================================
+   CHANGE 2: DYNAMIC QUANTITY PARSER & VALIDATOR
+   ============================================================ */
+function parseProductQuantity(qtyString) {
+  if (!qtyString) return { num: Infinity, unit: "kg" };
+  const str = String(qtyString).trim();
+  const matchNum = str.match(/([0-9]+(?:\.[0-9]+)?)/);
+  const num = matchNum ? parseFloat(matchNum[1]) : Infinity;
+  const unitMatch = str.replace(/[0-9.]/g, "").trim();
+  const unit = unitMatch || "kg";
+  return { num, unit };
+}
+
+let activeAvailableQty = Infinity;
+let activeProductUnit = "kg";
+
+function getQtyWarningMessage(maxQty, unit) {
+  return L("onlyAvailableMsg", { qty: maxQty, unit: unit });
+}
+
+function renderQtyWarning(show) {
+  let warnEl = document.getElementById("qtyWarning");
+  const continueBtn = document.getElementById("toBuyerDelivery");
+
+  if (show) {
+    const msg = getQtyWarningMessage(activeAvailableQty, activeProductUnit);
+    if (!warnEl) {
+      const qBox = document.querySelector("#cartModal .quantity-box");
+      if (qBox) {
+        warnEl = document.createElement("div");
+        warnEl.id = "qtyWarning";
+        warnEl.style.cssText = "color:#c0392b;background:#fde8e8;border:1px solid #f8b4b4;border-radius:9px;padding:8px 12px;font-size:11px;font-weight:700;margin-top:10px;";
+        qBox.appendChild(warnEl);
+      }
+    }
+    if (warnEl) {
+      warnEl.textContent = "⚠️ " + msg;
+      warnEl.style.display = "block";
+    }
+    if (continueBtn) {
+      continueBtn.disabled = true;
+      continueBtn.style.opacity = "0.5";
+      continueBtn.style.cursor = "not-allowed";
+    }
+  } else {
+    if (warnEl) {
+      warnEl.style.display = "none";
+    }
+    if (continueBtn) {
+      continueBtn.disabled = false;
+      continueBtn.style.opacity = "1";
+      continueBtn.style.cursor = "pointer";
+    }
+  }
+}
+
+async function loadProductsFromSupabase() {
+  try {
+    const { data, error } = await supabaseClient
+      .from("products")
+      .select("id,farmer_id,crop_name,category,quantity,unit,selling_price,location,description,image_url,status,created_at")
+      .eq("status", "active")
+      .order("created_at", { ascending: false });
+
+    if (error) {
+      console.error("Supabase products error:", error);
+      return;
+    }
+
+    const liveProducts = (data || []).map(p => {
+      const pUnit = p.unit || "kg";
+      const pQty = `${p.quantity} ${pUnit}`;
+      return {
+        id: p.id,
+        cat: p.category,
+        name: p.crop_name,
+        te: translateCropToTelugu(p.crop_name),
+        location: p.location || "Location not provided",
+        qty: pQty,
+        price: Number(p.selling_price),
+        unit: pUnit,
+        farmer: "Farmer",
+        phone: "",
+        img: p.image_url || getCropImage(p.crop_name, p.category),
+        description: p.description || "",
+        farmer_id: p.farmer_id
+      };
+    });
+
+    products = [...liveProducts, ...demoProducts];
+    render();
+    console.log("Live Supabase products loaded:", liveProducts.length);
+  } catch (err) {
+    console.error("Could not load Supabase products:", err);
+  }
+}
+
+function render() {
+  let a = products.filter(p =>
+    (cat === "All" || p.cat === cat) &&
+    (!term || `${p.name} ${p.te} ${p.cat} ${p.location} ${p.farmer}`.toLowerCase().includes(term.toLowerCase()))
+  );
+
+  const sort = document.getElementById("sort").value;
+  if (sort === "low") a.sort((x, y) => x.price - y.price);
+  if (sort === "high") a.sort((x, y) => y.price - x.price);
+
+  document.getElementById("count").textContent = a.length;
+  const box = document.getElementById("products");
+  box.innerHTML = "";
+
+  a.forEach(p => {
+    const displayName = lang === "te" ? (p.te || translateCropToTelugu(p.name)) : p.name;
+    const catLabel = lang === "te" ? (T.te[p.cat.toLowerCase()] || p.cat) : p.cat;
+    const farmerLabel = lang === "te" ? ("👨‍🌾 రైతు: " + (p.farmer === "Farmer" ? "రైతు" : p.farmer)) : ("👨‍🌾 " + p.farmer);
+
+    box.insertAdjacentHTML("beforeend", `
+    <article class="product">
+      <div class="pimg" style="background-image:url('${p.img}')">
+        <span class="ptag">${catLabel}</span>
+        <button class="heart">♡</button>
+      </div>
+      <div class="pbody">
+        <h3>${displayName}</h3>
+        <div class="loc">📍 ${p.location}</div>
+        <div class="pmeta">
+          <div><small>${L("availableLabel")}</small><b>${p.qty}</b></div>
+          <div style="text-align:right"><small>${L("farmerPriceLabel")}</small><b class="price">₹${p.price}/${p.unit}</b></div>
+        </div>
+        <div class="pfoot">
+          <span class="farmer">${farmerLabel}</span>
+          <button class="view" data-buy="${p.id}">${L("buyBtn")}</button>
+        </div>
+      </div>
+    </article>`);
+  });
+}
+
+function setLanguage() {
+  const d = T[lang];
+  document.querySelectorAll("[data-i18n]").forEach(e => {
+    e.innerHTML = d[e.dataset.i18n] || e.innerHTML;
+  });
+
+  const langBtn = document.getElementById("langBtn");
+  if (langBtn) langBtn.textContent = lang === "en" ? "తెలుగు" : "English";
+  const topLang = document.getElementById("topLang");
+  if (topLang) topLang.textContent = lang === "en" ? "English" : "తెలుగు";
+
+  // Top Bar
+  const topTextEl = document.querySelector(".top span:first-child");
+  if (topTextEl) topTextEl.textContent = L("topBar");
+
+  // Search input placeholder
+  const s = document.getElementById("search");
+  if (s) {
+    s.placeholder = lang === "en" ? s.dataset.placeholderEn : s.dataset.placeholderTe;
+  }
+  document.documentElement.lang = lang === "en" ? "en" : "te";
+
+  // Trust badges
+  const trustSpans = document.querySelectorAll(".trust span");
+  if (trustSpans.length >= 4) {
+    trustSpans[0].textContent = L("trust1");
+    trustSpans[1].textContent = L("trust2");
+    trustSpans[2].textContent = L("trust3");
+    trustSpans[3].textContent = L("trust4");
+  }
+
+  // Hero Card
+  const heroBadge = document.querySelector(".hero-photo .badge");
+  if (heroBadge) heroBadge.textContent = L("heroBadge");
+  const heroKicker = document.querySelector(".hero-card-body .kicker");
+  if (heroKicker) heroKicker.textContent = L("heroCardKicker");
+  const heroCardTitle = document.querySelector(".hero-card-body h3");
+  if (heroCardTitle) heroCardTitle.innerHTML = L("heroCardTitle");
+  const heroCardP = document.querySelector(".hero-card-body p");
+  if (heroCardP) heroCardP.textContent = L("heroCardText");
+
+  const statItems = document.querySelectorAll(".stats > div");
+  if (statItems.length >= 3) {
+    if (statItems[0].querySelector("b")) statItems[0].querySelector("b").textContent = L("statDirect");
+    if (statItems[0].querySelector("small")) statItems[0].querySelector("small").textContent = L("statDirectSub");
+    if (statItems[1].querySelector("b")) statItems[1].querySelector("b").textContent = L("statFresh");
+    if (statItems[1].querySelector("small")) statItems[1].querySelector("small").textContent = L("statFreshSub");
+    if (statItems[2].querySelector("b")) statItems[2].querySelector("b").textContent = L("statVoice");
+    if (statItems[2].querySelector("small")) statItems[2].querySelector("small").textContent = L("statVoiceSub");
+  }
+
+  // Categories subtitles
+  const catBtns = document.querySelectorAll(".categories .cat");
+  const catSubKeys = ["allSub", "paddySub", "vegSub", "fruitSub", "milkSub"];
+  catBtns.forEach((btn, idx) => {
+    const sm = btn.querySelector("small");
+    if (sm && catSubKeys[idx]) sm.textContent = L(catSubKeys[idx]);
+  });
+
+  // Sort dropdown
+  const sortSelect = document.getElementById("sort");
+  if (sortSelect && sortSelect.options && sortSelect.options.length >= 3) {
+    sortSelect.options[0].text = L("sortRecent");
+    sortSelect.options[1].text = L("sortLow");
+    sortSelect.options[2].text = L("sortHigh");
+  }
+
+  // Reference price section
+  const refKickerEl = document.querySelector(".reference .kicker");
+  if (refKickerEl) refKickerEl.textContent = L("refKicker");
+  const refH2 = document.querySelector(".reference h2");
+  if (refH2) refH2.textContent = L("refTitle");
+  const refP = document.querySelector(".reference > div:first-child > p");
+  if (refP) refP.textContent = L("refDesc");
+  const refGovSpan = document.querySelector(".reference .refrow:nth-of-type(1) span");
+  if (refGovSpan) refGovSpan.textContent = L("refGovLabel");
+  const refYourSpan = document.querySelector(".reference .refrow:nth-of-type(2) span");
+  if (refYourSpan) refYourSpan.textContent = L("refYourPriceLabel");
+  const refCropEl = document.getElementById("refCrop");
+  if (refCropEl && (refCropEl.textContent === "Select a crop" || refCropEl.textContent === "పంటను ఎంచుకోండి")) {
+    refCropEl.textContent = L("refCropDefault");
+  }
+
+  // How it works
+  const howCenterKicker = document.querySelector(".how .center .kicker");
+  if (howCenterKicker) howCenterKicker.textContent = L("howKicker");
+  const howCenterH2 = document.querySelector(".how .center h2");
+  if (howCenterH2) howCenterH2.textContent = L("howTitle");
+  const howCenterP = document.querySelector(".how .center p");
+  if (howCenterP) howCenterP.textContent = L("howDesc");
+
+  const steps = document.querySelectorAll(".steps .step");
+  if (steps.length >= 3) {
+    if (steps[0].querySelector("h3")) steps[0].querySelector("h3").textContent = L("step1Title");
+    if (steps[0].querySelector("p")) steps[0].querySelector("p").textContent = L("step1Desc");
+    if (steps[1].querySelector("h3")) steps[1].querySelector("h3").textContent = L("step2Title");
+    if (steps[1].querySelector("p")) steps[1].querySelector("p").textContent = L("step2Desc");
+    if (steps[2].querySelector("h3")) steps[2].querySelector("h3").textContent = L("step3Title");
+    if (steps[2].querySelector("p")) steps[2].querySelector("p").textContent = L("step3Desc");
+  }
+
+  // Sell section
+  const sellKickerEl = document.querySelector(".sell .kicker");
+  if (sellKickerEl) sellKickerEl.textContent = L("sellKicker");
+  const sellH2 = document.querySelector(".sell h2");
+  if (sellH2) sellH2.innerHTML = L("sellTitle");
+  const sellP = document.querySelector(".sell-content > p");
+  if (sellP) sellP.textContent = L("sellDesc");
+
+  const featEls = document.querySelectorAll(".features .feature");
+  if (featEls.length >= 3) {
+    if (featEls[0].querySelector("b")) featEls[0].querySelector("b").textContent = L("feat1Title");
+    if (featEls[0].querySelector("small")) featEls[0].querySelector("small").textContent = L("feat1Desc");
+    if (featEls[1].querySelector("b")) featEls[1].querySelector("b").textContent = L("feat2Title");
+    if (featEls[1].querySelector("small")) featEls[1].querySelector("small").textContent = L("feat2Desc");
+    if (featEls[2].querySelector("b")) featEls[2].querySelector("b").textContent = L("feat3Title");
+    if (featEls[2].querySelector("small")) featEls[2].querySelector("small").textContent = L("feat3Desc");
+  }
+  const openSell2Btn = document.getElementById("openSell2");
+  if (openSell2Btn) openSell2Btn.textContent = L("startSellingBtn");
+
+  // Footer
+  const footerBrandP = document.querySelector(".footerbrand p");
+  if (footerBrandP) footerBrandP.textContent = L("footerBrandDesc");
+  const footerCols = document.querySelectorAll(".footergrid > div");
+  if (footerCols.length >= 4) {
+    if (footerCols[1].querySelector("h4")) footerCols[1].querySelector("h4").textContent = L("footerMarketplace");
+    const links1 = footerCols[1].querySelectorAll("a");
+    if (links1[0]) links1[0].textContent = L("footerBrowseCrops");
+    if (links1[1]) links1[1].textContent = L("footerSellCrop");
+
+    if (footerCols[2].querySelector("h4")) footerCols[2].querySelector("h4").textContent = L("footerSupport");
+    const links2 = footerCols[2].querySelectorAll("a");
+    if (links2[0]) links2[0].textContent = L("footerContactAdmin");
+    if (links2[1]) links2[1].textContent = L("footerReportListing");
+
+    if (footerCols[3].querySelector("h4")) footerCols[3].querySelector("h4").textContent = L("footerLangTitle");
+    const links3 = footerCols[3].querySelectorAll("a");
+    if (links3[1]) links3[1].textContent = L("footerChatAdmin");
+  }
+  const bottomSpans = document.querySelectorAll(".bottom span");
+  if (bottomSpans.length >= 2) {
+    bottomSpans[0].textContent = L("footerCopy");
+    bottomSpans[1].textContent = L("footerBackendNote");
+  }
+
+  // Admin Chat
+  const chatHeadB = document.querySelector(".chat-head b");
+  if (chatHeadB) chatHeadB.textContent = L("chatTitle");
+  const chatHeadSm = document.querySelector(".chat-head small");
+  if (chatHeadSm) chatHeadSm.textContent = L("chatSub");
+  const chatIn = document.getElementById("chatText");
+  if (chatIn) chatIn.placeholder = L("chatPlaceholder");
+  const firstAdminMsg = document.querySelector(".messages .msg.admin");
+  if (firstAdminMsg) firstAdminMsg.textContent = L("chatWelcome");
+
+  // Sell Modal Step 1
+  const s1Kicker = document.querySelector("#sellStep1 .kicker");
+  if (s1Kicker) s1Kicker.textContent = L("sellStep1Kicker");
+  const s1H2 = document.querySelector("#sellStep1 h2");
+  if (s1H2) s1H2.textContent = L("sellStep1Title");
+  const s1Intro = document.querySelector("#sellStep1 .intro");
+  if (s1Intro) s1Intro.textContent = L("sellStep1Intro");
+  const farmerNameIn = document.getElementById("farmerName");
+  if (farmerNameIn) farmerNameIn.placeholder = L("phFarmerName");
+  const farmerPhoneIn = document.getElementById("farmerPhone");
+  if (farmerPhoneIn) farmerPhoneIn.placeholder = L("phFarmerPhone");
+  const toCropBtn = document.getElementById("toCropDetails");
+  if (toCropBtn) toCropBtn.textContent = L("continueBtn");
+
+  // Sell Modal Step 2
+  const s2Kicker = document.querySelector("#sellStep2 .kicker");
+  if (s2Kicker) s2Kicker.textContent = L("sellStep2Kicker");
+  const s2H2 = document.querySelector("#sellStep2 h2");
+  if (s2H2) s2H2.textContent = L("sellStep2Title");
+  const s2Intro = document.querySelector("#sellStep2 .intro");
+  if (s2Intro) s2Intro.textContent = L("sellStep2Intro");
+  const cropNameIn = document.getElementById("cropName");
+  if (cropNameIn) cropNameIn.placeholder = L("phCropName");
+  const cropQtyIn = document.getElementById("cropQty");
+  if (cropQtyIn) cropQtyIn.placeholder = L("phCropQty");
+  const cropPriceIn = document.getElementById("cropPrice");
+  if (cropPriceIn) cropPriceIn.placeholder = L("phPrice");
+  const cropLocIn = document.getElementById("cropLocation");
+  if (cropLocIn) cropLocIn.placeholder = L("phCropLoc");
+  const cropDescIn = document.getElementById("cropDesc");
+  if (cropDescIn) cropDescIn.placeholder = L("phCropDesc");
+  const back1Btn = document.getElementById("back1");
+  if (back1Btn) back1Btn.textContent = L("backBtn");
+  const toPayBtn = document.getElementById("toPayment");
+  if (toPayBtn) toPayBtn.textContent = L("continueBtn");
+  const sellGovSpan = document.querySelector("#sellStep2 .crop-info .price-line span");
+  if (sellGovSpan) sellGovSpan.textContent = L("sellGovRefLabel");
+  const sellGovSm = document.getElementById("sellGovNote");
+  if (sellGovSm && sellGovSm.textContent.includes("The latest verified")) sellGovSm.textContent = L("sellGovNote");
+
+  // Sell Modal Step 3
+  const s3Kicker = document.querySelector("#sellStep3 .kicker");
+  if (s3Kicker) s3Kicker.textContent = L("sellStep3Kicker");
+  const s3H2 = document.querySelector("#sellStep3 h2");
+  if (s3H2) s3H2.textContent = L("sellStep3Title");
+  const s3Intro = document.querySelector("#sellStep3 .intro");
+  if (s3Intro) s3Intro.textContent = L("sellStep3Intro");
+  const back2Btn = document.getElementById("back2");
+  if (back2Btn) back2Btn.textContent = L("backBtn");
+  const submitListingBtn = document.getElementById("submitListing");
+  if (submitListingBtn && !submitListingBtn.disabled) submitListingBtn.textContent = L("publishListingBtn");
+
+  // Sell Modal Success
+  const sellSuccH2 = document.querySelector("#sellSuccess h2");
+  if (sellSuccH2) sellSuccH2.textContent = L("sellSuccessTitle");
+  const sellSuccP = document.querySelector("#sellSuccess .intro");
+  if (sellSuccP) sellSuccP.textContent = L("sellSuccessIntro");
+  const doneSellBtn = document.getElementById("doneSell");
+  if (doneSellBtn) doneSellBtn.textContent = L("doneBtn");
+
+  // Buy Modal Step 1
+  const b1Kicker = document.querySelector("#buyStep1 .kicker");
+  if (b1Kicker) b1Kicker.textContent = L("buyStep1Kicker");
+  const b1H2 = document.querySelector("#buyStep1 h2");
+  if (b1H2) b1H2.textContent = L("buyStep1Title");
+  const qbTitle = document.querySelector("#buyStep1 .quantity-box b");
+  if (qbTitle) qbTitle.textContent = L("lblQuantity");
+  const b1RefSpan = document.querySelector("#buyStep1 .payment-summary div:nth-child(1) span");
+  if (b1RefSpan) b1RefSpan.textContent = L("lblRefPrice");
+  const b1PriceSpan = document.querySelector("#buyStep1 .payment-summary div:nth-child(2) span");
+  if (b1PriceSpan) b1PriceSpan.textContent = L("lblFarmerUnitPrice");
+  const b1TotSpan = document.querySelector("#buyStep1 .payment-summary div:nth-child(3) span");
+  if (b1TotSpan) b1TotSpan.textContent = L("lblTotal");
+  const toBuyerDeliveryBtn = document.getElementById("toBuyerDelivery");
+  if (toBuyerDeliveryBtn) toBuyerDeliveryBtn.textContent = L("continueBtn");
+
+  // Buy Modal Step 2
+  const b2Kicker = document.querySelector("#buyStep2 .kicker");
+  if (b2Kicker) b2Kicker.textContent = L("buyStep2Kicker");
+  const b2H2 = document.querySelector("#buyStep2 h2");
+  if (b2H2) b2H2.textContent = L("buyStep2Title");
+  const b2Intro = document.querySelector("#buyStep2 .intro");
+  if (b2Intro) b2Intro.textContent = L("buyStep2Intro");
+  const buyerNameIn = document.getElementById("buyerName");
+  if (buyerNameIn) buyerNameIn.placeholder = L("phBuyerName");
+  const buyerLocIn = document.getElementById("buyerLocation");
+  if (buyerLocIn) buyerLocIn.placeholder = L("phBuyerLoc");
+  const sellerContactB = document.querySelector("#buyStep2 .contact-box b");
+  if (sellerContactB) sellerContactB.textContent = L("lblSellerContact");
+  const delNote = document.querySelector("#buyStep2 .delivery-note");
+  if (delNote) delNote.textContent = L("callFarmerNote");
+  const delQues = document.querySelector("#buyStep2 > b:nth-of-type(1)");
+  if (delQues) delQues.textContent = L("lblDeliveryQuestion");
+
+  const delOptions = document.querySelectorAll('#buyStep2 input[name="delivery"]');
+  if (delOptions && delOptions.length >= 3) {
+    if (delOptions[0] && delOptions[0].parentElement && delOptions[0].parentElement.lastChild) {
+      delOptions[0].parentElement.lastChild.textContent = " " + L("deliveryOpt1");
+    }
+    if (delOptions[1] && delOptions[1].parentElement && delOptions[1].parentElement.lastChild) {
+      delOptions[1].parentElement.lastChild.textContent = " " + L("deliveryOpt2");
+    }
+    if (delOptions[2] && delOptions[2].parentElement && delOptions[2].parentElement.lastChild) {
+      delOptions[2].parentElement.lastChild.textContent = " " + L("deliveryOpt3");
+    }
+  }
+  const backBuyer1Btn = document.getElementById("backBuyer1");
+  if (backBuyer1Btn) backBuyer1Btn.textContent = L("backBtn");
+  const toBuyerPaymentBtn = document.getElementById("toBuyerPayment");
+  if (toBuyerPaymentBtn) toBuyerPaymentBtn.textContent = L("continueToPaymentBtn");
+
+  // Buy Modal Step 3
+  const b3Kicker = document.querySelector("#buyStep3 .kicker");
+  if (b3Kicker) b3Kicker.textContent = L("buyStep3Kicker");
+  const b3H2 = document.querySelector("#buyStep3 h2");
+  if (b3H2) b3H2.textContent = L("buyStep3Title");
+  const b3Intro = document.querySelector("#buyStep3 .intro");
+  if (b3Intro) b3Intro.textContent = L("buyStep3Intro");
+
+  const payOptions = document.querySelectorAll('#buyStep3 input[name="buyerPay"]');
+  if (payOptions && payOptions.length >= 2) {
+    if (payOptions[0] && payOptions[0].parentElement && payOptions[0].parentElement.lastChild) {
+      payOptions[0].parentElement.lastChild.textContent = " " + L("payOpt1");
+    }
+    if (payOptions[1] && payOptions[1].parentElement && payOptions[1].parentElement.lastChild) {
+      payOptions[1].parentElement.lastChild.textContent = " " + L("payOpt2");
+    }
+  }
+  const backBuyer2Btn = document.getElementById("backBuyer2");
+  if (backBuyer2Btn) backBuyer2Btn.textContent = L("backBtn");
+  const confirmBuyBtn = document.getElementById("confirmBuy");
+  if (confirmBuyBtn) confirmBuyBtn.textContent = L("confirmPaymentBtn");
+
+  // Buy Modal Success
+  const buySuccH2 = document.querySelector("#buySuccess h2");
+  if (buySuccH2) buySuccH2.textContent = L("orderCreatedTitle");
+  const buySuccP = document.querySelector("#buySuccess .intro");
+  if (buySuccP) buySuccP.textContent = L("orderCreatedIntro");
+  const doneBuyBtn = document.getElementById("doneBuy");
+  if (doneBuyBtn) doneBuyBtn.textContent = L("doneBtn");
+
+  // Cart bar
+  const checkoutBtn = document.getElementById("checkoutCart");
+  if (checkoutBtn) checkoutBtn.textContent = L("checkoutBtn");
+
+  // Re-render product modal card if open
+  if (selectedProduct && document.getElementById("cartProduct") && document.getElementById("cartProduct").innerHTML) {
+    const dispName = lang === "te" ? (selectedProduct.te || translateCropToTelugu(selectedProduct.name)) : selectedProduct.name;
+    document.getElementById("cartProduct").innerHTML = `
+      <div class="product" style="display:flex;margin-top:12px">
+        <div class="pimg" style="width:130px;height:110px;background-image:url('${selectedProduct.img}')"></div>
+        <div class="pbody">
+          <h3>${dispName}</h3>
+          <div class="loc">📍 ${selectedProduct.location}</div>
+          <b class="price">₹${selectedProduct.price}/${selectedProduct.unit}</b>
+        </div>
+      </div>`;
+  }
+
+  // Update quantity warning message if shown
+  const warnEl = document.getElementById("qtyWarning");
+  if (warnEl && warnEl.style.display !== "none") {
+    warnEl.textContent = "⚠️ " + getQtyWarningMessage(activeAvailableQty, activeProductUnit);
+  }
+
+  render();
+}
+
+document.getElementById("langBtn").onclick = () => {
+  lang = lang === "en" ? "te" : "en";
+  setLanguage();
+  toast(lang === "te" ? "తెలుగు భాష ఎంచుకోబడింది" : "English selected");
+};
+
+document.getElementById("footerLang").onclick = e => {
+  e.preventDefault();
+  document.getElementById("langBtn").click();
+};
+
+document.getElementById("footerChat2")?.addEventListener("click", e => {
+  e.preventDefault();
+  document.getElementById("chatPanel").classList.add("open");
+});
+
+document.querySelectorAll(".cat").forEach(b => {
+  b.onclick = () => {
+    document.querySelectorAll(".cat").forEach(x => x.classList.remove("active"));
+    b.classList.add("active");
+    cat = b.dataset.cat;
+    render();
+  };
+});
+
+document.getElementById("allBtn").onclick = () => {
+  cat = "All";
+  document.querySelectorAll(".cat").forEach(x => x.classList.toggle("active", x.dataset.cat === "All"));
+  term = "";
+  document.getElementById("search").value = "";
+  render();
+};
+
+document.getElementById("sort").onchange = render;
+
+document.getElementById("searchBtn").onclick = () => {
+  term = document.getElementById("search").value.trim();
+  render();
+  document.getElementById("crops").scrollIntoView({ behavior: "smooth" });
+};
+
+document.getElementById("search").onkeydown = e => {
+  if (e.key === "Enter") document.getElementById("searchBtn").click();
+};
+
+document.getElementById("products").onclick = e => {
+  const heart = e.target.closest(".heart");
+  if (heart) {
+    heart.textContent = heart.textContent === "♡" ? "♥" : "♡";
+    return;
+  }
+  const b = e.target.closest("[data-buy]");
+  if (!b) return;
+  selectedProduct = products.find(p => p.id == b.dataset.buy);
+  openCart(selectedProduct);
+};
+
+function toast(msg) {
+  const t = document.getElementById("toast");
+  t.textContent = msg;
+  t.classList.add("show");
+  clearTimeout(window.toastTimer);
+  window.toastTimer = setTimeout(() => t.classList.remove("show"), 2600);
+}
+
+function voiceInput(callback) {
+  const R = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if (!R) {
+    toast(L("voiceNotSupportedToast"));
+    return;
+  }
+  const r = new R();
+  r.lang = lang === "te" ? "te-IN" : "en-IN";
+  r.interimResults = false;
+  r.maxAlternatives = 1;
+  toast(L("listeningToast"));
+  r.onresult = e => callback(e.results[0][0].transcript);
+  r.onerror = e => toast(L("voiceFailedToast") + (e.error || "microphone permission"));
+  r.start();
+}
+
+document.getElementById("voiceSearch").onclick = () => voiceInput(t => {
+  document.getElementById("search").value = t;
+  term = t;
+  render();
+});
+
+document.getElementById("voiceTop").onclick = () => voiceInput(t => {
+  document.getElementById("search").value = t;
+  term = t;
+  render();
+  document.getElementById("crops").scrollIntoView({ behavior: "smooth" });
+});
+
+document.getElementById("menuBtn").onclick = () => {
+  const n = document.querySelector("nav");
+  n.style.display = n.style.display === "flex" ? "none" : "flex";
+  n.style.position = "absolute";
+  n.style.top = "78px";
+  n.style.left = "5%";
+  n.style.right = "5%";
+  n.style.padding = "12px";
+  n.style.background = "#fff";
+  n.style.flexDirection = "column";
+  n.style.borderRadius = "14px";
+};
+
+/* HERO SLIDESHOW */
+const heroSlides = [
+  "https://images.unsplash.com/photo-1500595046743-cd271d694d30?auto=format&fit=crop&w=1100&q=85",
+  "https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&w=1100&q=85",
+  "https://images.unsplash.com/photo-1490474418585-ba9bad8fd0ea?auto=format&fit=crop&w=1100&q=85",
+  "https://images.unsplash.com/photo-1550583724-b2692b85b150?auto=format&fit=crop&w=1100&q=85"
+];
+const heroPhoto = document.getElementById("heroPhoto"), slideDots = document.getElementById("slideDots");
+heroSlides.forEach((_, i) => {
+  const d = document.createElement("span");
+  d.className = "slide-dot" + (i === 0 ? " active" : "");
+  slideDots.appendChild(d);
+});
+let heroIndex = 0;
+heroPhoto.style.backgroundImage = `url("${heroSlides[0]}")`;
+setInterval(() => {
+  heroIndex = (heroIndex + 1) % heroSlides.length;
+  heroPhoto.classList.add("fade");
+  setTimeout(() => {
+    heroPhoto.style.backgroundImage = `url("${heroSlides[heroIndex]}")`;
+    heroPhoto.classList.remove("fade");
+    [...slideDots.children].forEach((d, i) => d.classList.toggle("active", i === heroIndex));
+  }, 180);
+}, 2000);
+
+/* SELLER FLOW */
+const sellModal = document.getElementById("sellModal");
+function openSell() {
+  sellModal.style.display = "grid";
   showSellPane("sellStep1");
 }
-function closeSell(){sellModal.style.display="none"}
-document.getElementById("openSell").onclick=openSell;
-document.getElementById("openSell2").onclick=openSell;
-document.getElementById("closeSell").onclick=closeSell;
-function showSellPane(id){
-  document.querySelectorAll("#sellModal .step-pane").forEach(x=>x.classList.remove("active"));
+function closeSell() {
+  sellModal.style.display = "none";
+}
+document.getElementById("openSell").onclick = openSell;
+document.getElementById("openSell2").onclick = openSell;
+document.getElementById("closeSell").onclick = closeSell;
+
+function showSellPane(id) {
+  document.querySelectorAll("#sellModal .step-pane").forEach(x => x.classList.remove("active"));
   document.getElementById(id).classList.add("active");
 }
 
-/* FARMER DETAILS -> CROP DETAILS */
-document.getElementById("toCropDetails").onclick=()=>{
-  const name=document.getElementById("farmerName").value.trim();
-  const phone=document.getElementById("farmerPhone").value.trim();
-  if(!name || !/^[0-9]{10}$/.test(phone)){
-    toast("Enter valid farmer name and 10-digit mobile number.");
+document.getElementById("toCropDetails").onclick = () => {
+  const name = document.getElementById("farmerName").value.trim();
+  const phone = document.getElementById("farmerPhone").value.trim();
+  if (!name || !/^[0-9]{10}$/.test(phone)) {
+    toast(L("enterFarmerDetailsMsg"));
     return;
   }
   showSellPane("sellStep2");
 };
 
-async function getGovPrice(crop){
- if(!crop)return;
- document.getElementById("refCrop").textContent=crop;
- document.getElementById("govPrice").textContent="Loading…";
- document.getElementById("refSource").textContent="Checking verified source…";
- document.getElementById("sellGovPrice").textContent="Loading…";
- try{
-   const location = document.getElementById("cropLocation")?.value.trim() || "";
-   const r=await fetch("http://localhost:3000/api/market-price?crop="+encodeURIComponent(crop)+"&location="+encodeURIComponent(location));
-   if(!r.ok)throw new Error();
-   const d=await r.json();
-   const price=d.price?`₹${d.price}/${d.unit||"kg"}`:"Not available";
-   document.getElementById("govPrice").textContent=price;
-   document.getElementById("sellGovPrice").textContent=price;
-   document.getElementById("refSource").textContent=d.source||"Verified market source";
-   document.getElementById("refDate").textContent=d.date?`Source date: ${d.date}`:"Latest available source";
-   document.getElementById("sellGovNote").textContent=d.source||"Verified market source";
- }catch(e){
-   document.getElementById("govPrice").textContent="Not connected";
-   document.getElementById("sellGovPrice").textContent="Connect API";
-   document.getElementById("refSource").textContent="Market API not running";
-   document.getElementById("refDate").textContent="No hard-coded government price is shown.";
-   document.getElementById("sellGovNote").textContent="Start the market backend to load the latest government mandi reference price.";
- }
+async function getGovPrice(crop) {
+  if (!crop) return;
+  document.getElementById("refCrop").textContent = crop;
+  document.getElementById("govPrice").textContent = "Loading…";
+  document.getElementById("refSource").textContent = L("checkingVerifiedMsg");
+  document.getElementById("sellGovPrice").textContent = "Loading…";
+
+  try {
+    const location = document.getElementById("cropLocation")?.value.trim() || "";
+    const r = await fetch("http://localhost:3000/api/market-price?crop=" + encodeURIComponent(crop) + "&location=" + encodeURIComponent(location));
+    if (!r.ok) throw new Error();
+    const d = await r.json();
+    const price = d.price ? `₹${d.price}/${d.unit || "kg"}` : "Not available";
+    document.getElementById("govPrice").textContent = price;
+    document.getElementById("sellGovPrice").textContent = price;
+    document.getElementById("refSource").textContent = d.source || "Verified market source";
+    document.getElementById("refDate").textContent = d.date ? `Source date: ${d.date}` : "Latest available source";
+    document.getElementById("sellGovNote").textContent = d.source || "Verified market source";
+  } catch (e) {
+    document.getElementById("govPrice").textContent = "Not connected";
+    document.getElementById("sellGovPrice").textContent = "Connect API";
+    document.getElementById("refSource").textContent = "Market API not running";
+    document.getElementById("refDate").textContent = "No hard-coded government price is shown.";
+    document.getElementById("sellGovNote").textContent = "Start the market backend to load the latest government mandi reference price.";
+  }
 }
-document.getElementById("cropName").oninput=e=>{clearTimeout(window.priceTimer);window.priceTimer=setTimeout(()=>getGovPrice(e.target.value.trim()),500)};
-document.getElementById("cropCat").onchange=e=>{if(e.target.value)getGovPrice(e.target.value)};
-document.getElementById("cropLocation").oninput=e=>{
- clearTimeout(window.locationPriceTimer);
- window.locationPriceTimer=setTimeout(()=>{
-   const crop=document.getElementById("cropName").value.trim();
-   if(crop)getGovPrice(crop);
- },500);
+
+document.getElementById("cropName").oninput = e => {
+  clearTimeout(window.priceTimer);
+  window.priceTimer = setTimeout(() => getGovPrice(e.target.value.trim()), 500);
 };
 
-document.getElementById("toPayment").onclick=()=>{
- const crop=document.getElementById("cropName").value.trim();
- const qty=document.getElementById("cropQty").value.trim();
- const price=document.getElementById("cropPrice").value.trim();
- if(!crop||!qty||!price){toast("Enter crop name, quantity and selling price.");return}
- document.getElementById("sumFarmer").textContent=document.getElementById("farmerName").value;
- document.getElementById("sumFarmerPhone").textContent=document.getElementById("farmerPhone").value;
- document.getElementById("sumCrop").textContent=crop;
- document.getElementById("sumQty").textContent=qty;
- document.getElementById("sumPrice").textContent=price;
- document.getElementById("sumLocation").textContent=document.getElementById("cropLocation").value||"—";
- showSellPane("sellStep3");
+document.getElementById("cropCat").onchange = e => {
+  if (e.target.value) getGovPrice(e.target.value);
 };
-document.getElementById("back1").onclick=()=>showSellPane("sellStep1");
-document.getElementById("back2").onclick=()=>showSellPane("sellStep2");
-document.getElementById("submitListing").onclick=async()=>{
-  const crop=document.getElementById("cropName").value.trim();
-  const category=document.getElementById("cropCat").value;
-  const quantityText=document.getElementById("cropQty").value.trim();
-  const priceText=document.getElementById("cropPrice").value.trim();
-  const farmerName=document.getElementById("farmerName").value.trim();
-  const farmerPhone=document.getElementById("farmerPhone").value.trim();
-  const location=document.getElementById("cropLocation").value.trim();
-  const description=document.getElementById("cropDesc").value.trim();
 
-  const quantity=parseFloat(quantityText.replace(/[^0-9.]/g,""));
-  const sellingPrice=parseFloat(priceText.replace(/[^0-9.]/g,""));
+document.getElementById("cropLocation").oninput = e => {
+  clearTimeout(window.locationPriceTimer);
+  window.locationPriceTimer = setTimeout(() => {
+    const crop = document.getElementById("cropName").value.trim();
+    if (crop) getGovPrice(crop);
+  }, 500);
+};
 
-  if(!crop||!category||!quantity||!sellingPrice){
-    toast("Please enter crop name, category, quantity and selling price.");
+document.getElementById("toPayment").onclick = () => {
+  const crop = document.getElementById("cropName").value.trim();
+  const qty = document.getElementById("cropQty").value.trim();
+  const price = document.getElementById("cropPrice").value.trim();
+  if (!crop || !qty || !price) {
+    toast(L("enterCropDetailsMsg"));
+    return;
+  }
+  document.getElementById("sumFarmer").textContent = document.getElementById("farmerName").value;
+  document.getElementById("sumFarmerPhone").textContent = document.getElementById("farmerPhone").value;
+  document.getElementById("sumCrop").textContent = lang === "te" ? translateCropToTelugu(crop) : crop;
+  document.getElementById("sumQty").textContent = qty;
+  document.getElementById("sumPrice").textContent = price;
+  document.getElementById("sumLocation").textContent = document.getElementById("cropLocation").value || "—";
+  showSellPane("sellStep3");
+};
+
+document.getElementById("back1").onclick = () => showSellPane("sellStep1");
+document.getElementById("back2").onclick = () => showSellPane("sellStep2");
+
+document.getElementById("submitListing").onclick = async () => {
+  const crop = document.getElementById("cropName").value.trim();
+  const category = document.getElementById("cropCat").value;
+  const quantityText = document.getElementById("cropQty").value.trim();
+  const priceText = document.getElementById("cropPrice").value.trim();
+  const farmerName = document.getElementById("farmerName").value.trim();
+  const farmerPhone = document.getElementById("farmerPhone").value.trim();
+  const location = document.getElementById("cropLocation").value.trim();
+  const description = document.getElementById("cropDesc").value.trim();
+
+  const quantity = parseFloat(quantityText.replace(/[^0-9.]/g, ""));
+  const sellingPrice = parseFloat(priceText.replace(/[^0-9.]/g, ""));
+
+  if (!crop || !category || !quantity || !sellingPrice) {
+    toast(L("enterAllCropFieldsMsg"));
     return;
   }
 
-  const btn=document.getElementById("submitListing");
-  btn.disabled=true;
-  btn.textContent="Publishing…";
+  const btn = document.getElementById("submitListing");
+  btn.disabled = true;
+  btn.textContent = L("publishing");
 
-  try{
-    // Save the farmer name/phone when a Supabase website session exists.
-    const {data:{user}}=await supabaseClient.auth.getUser();
+  const cropImg = getCropImage(crop, category);
+  const cropTe = translateCropToTelugu(crop);
 
-    if(!user){
-      // OTP/login is not shown in this website. Keep the new listing visible
-      // in the current page when no Supabase session is available.
-      const localProduct={
-        id:"local-"+Date.now(),
-        cat:category,
-        name:crop,
-        te:crop,
-        location:location||"Location not provided",
-        qty:`${quantity} kg`,
-        price:sellingPrice,
-        unit:"kg",
-        farmer:farmerName||"Farmer",
-        phone:farmerPhone||"",
-        img:getCropImage(category),
-        description:description
+  try {
+    const { data: { user } } = await supabaseClient.auth.getUser();
+
+    if (!user) {
+      const localProduct = {
+        id: "local-" + Date.now(),
+        cat: category,
+        name: crop,
+        te: cropTe,
+        location: location || "Location not provided",
+        qty: `${quantity} kg`,
+        price: sellingPrice,
+        unit: "kg",
+        farmer: farmerName || "Farmer",
+        phone: farmerPhone || "",
+        img: cropImg,
+        description: description
       };
-      products=[localProduct,...products];
+      products = [localProduct, ...products];
       render();
-      toast("Crop added to the product list. Login is needed to save it permanently in Supabase.");
+      toast(L("cropAddedToast"));
       showSellPane("sellSuccess");
       return;
     }
 
-    const {error}=await supabaseClient.from("products").insert({
-      farmer_id:user.id,
-      crop_name:crop,
-      category:category,
-      quantity:quantity,
-      unit:"kg",
-      selling_price:sellingPrice,
-      location:location,
-      description:description,
-      status:"active"
+    const { error } = await supabaseClient.from("products").insert({
+      farmer_id: user.id,
+      crop_name: crop,
+      category: category,
+      quantity: quantity,
+      unit: "kg",
+      selling_price: sellingPrice,
+      location: location,
+      description: description,
+      status: "active"
     });
 
-    if(error){
-      console.error("Product insert error:",error);
-      toast("Could not publish listing: "+error.message);
+    if (error) {
+      console.error("Product insert error:", error);
+      toast(L("cropPublishErrorToast") + error.message);
       return;
     }
 
-    // Show the newly saved listing immediately.
-    const newProduct={
-      id:"saved-"+Date.now(),
-      cat:category,
-      name:crop,
-      te:crop,
-      location:location||"Location not provided",
-      qty:`${quantity} kg`,
-      price:sellingPrice,
-      unit:"kg",
-      farmer:farmerName||"Farmer",
-      phone:farmerPhone||"",
-      img:getCropImage(category),
-      description:description,
-      farmer_id:user.id
+    const newProduct = {
+      id: "saved-" + Date.now(),
+      cat: category,
+      name: crop,
+      te: cropTe,
+      location: location || "Location not provided",
+      qty: `${quantity} kg`,
+      price: sellingPrice,
+      unit: "kg",
+      farmer: farmerName || "Farmer",
+      phone: farmerPhone || "",
+      img: cropImg,
+      description: description,
+      farmer_id: user.id
     };
-    products=[newProduct,...products];
+    products = [newProduct, ...products];
     render();
-    toast("Crop listing published successfully!");
+    toast(L("cropPublishedToast"));
     showSellPane("sellSuccess");
-  }catch(err){
-    console.error("Publish error:",err);
-    toast("Something went wrong while publishing.");
-  }finally{
-    btn.disabled=false;
-    btn.textContent="Publish Crop Listing →";
+  } catch (err) {
+    console.error("Publish error:", err);
+    toast(L("wentWrongToast"));
+  } finally {
+    btn.disabled = false;
+    btn.textContent = L("publishListingBtn");
   }
 };
-document.getElementById("doneSell").onclick=closeSell;
 
-/* BUY FLOW: quantity first -> farmer contact/delivery -> payment */
-const cartModal=document.getElementById("cartModal");
-function openCart(p){
- selectedProduct=p;
- document.getElementById("cartProduct").innerHTML=`<div class="product" style="display:flex;margin-top:12px"><div class="pimg" style="width:130px;height:110px;background-image:url('${p.img}')"></div><div class="pbody"><h3>${lang==="te"?p.te:p.name}</h3><div class="loc">📍 ${p.location}</div><b class="price">₹${p.price}/${p.unit}</b></div></div>`;
- document.getElementById("cartQty").value=1;
- document.getElementById("cartUnit").textContent=p.unit;
- updateCart();
- showBuyPane("buyStep1");
- cartModal.style.display="grid";
-}
-function showBuyPane(id){document.querySelectorAll("#cartModal .step-pane").forEach(x=>x.classList.remove("active"));document.getElementById(id).classList.add("active")}
-function updateCart(){
- if(!selectedProduct)return;
- const q=Math.max(1,Number(document.getElementById("cartQty").value)||1);
- document.getElementById("cartQty").value=q;
- document.getElementById("cartUnitPrice").textContent=`₹${selectedProduct.price}/${selectedProduct.unit}`;
- document.getElementById("cartTotal").textContent=`₹${selectedProduct.price*q}`;
- document.getElementById("cartRef").textContent="Checking live rate…";
- getGovPrice(selectedProduct.name);
-}
-document.getElementById("minus").onclick=()=>{document.getElementById("cartQty").value=Math.max(1,Number(document.getElementById("cartQty").value)-1);updateCart()};
-document.getElementById("plus").onclick=()=>{document.getElementById("cartQty").value=Number(document.getElementById("cartQty").value)+1;updateCart()};
-document.getElementById("cartQty").oninput=updateCart;
-document.getElementById("closeCart").onclick=()=>cartModal.style.display="none";
+document.getElementById("doneSell").onclick = closeSell;
 
-function formatPhone(phone){
- if(!phone)return "Phone number not available";
- const digits=String(phone).replace(/\D/g,"");
- if(digits.length===10)return `+91 ${digits.slice(0,5)} ${digits.slice(5)}`;
- if(digits.length===12&&digits.startsWith("91"))return `+91 ${digits.slice(2,7)} ${digits.slice(7)}`;
- return `+${digits}`;
+/* ============================================================
+   BUY FLOW: QUANTITY AVAILABILITY VALIDATION & LOCALIZATION
+   ============================================================ */
+const cartModal = document.getElementById("cartModal");
+
+function openCart(p) {
+  selectedProduct = p;
+  const parsed = parseProductQuantity(p.qty);
+  activeAvailableQty = parsed.num;
+  activeProductUnit = parsed.unit || p.unit || "kg";
+
+  const dispName = lang === "te" ? (p.te || translateCropToTelugu(p.name)) : p.name;
+  document.getElementById("cartProduct").innerHTML = `
+    <div class="product" style="display:flex;margin-top:12px">
+      <div class="pimg" style="width:130px;height:110px;background-image:url('${p.img}')"></div>
+      <div class="pbody">
+        <h3>${dispName}</h3>
+        <div class="loc">📍 ${p.location}</div>
+        <b class="price">₹${p.price}/${p.unit}</b>
+      </div>
+    </div>`;
+
+  document.getElementById("cartQty").value = 1;
+  document.getElementById("cartQty").max = activeAvailableQty;
+  document.getElementById("cartUnit").textContent = p.unit;
+
+  renderQtyWarning(false);
+  updateCart();
+  showBuyPane("buyStep1");
+  cartModal.style.display = "grid";
 }
 
-document.getElementById("toBuyerDelivery").onclick=()=>{
- const q=Number(document.getElementById("cartQty").value)||1;
- const phone=selectedProduct.phone||"";
- document.getElementById("farmerPhoneText").textContent=formatPhone(phone);
- document.getElementById("farmerPhoneLink").href=phone?`tel:+${phone}`:"#";
- showBuyPane("buyStep2");
+function showBuyPane(id) {
+  document.querySelectorAll("#cartModal .step-pane").forEach(x => x.classList.remove("active"));
+  document.getElementById(id).classList.add("active");
+}
+
+function updateCart() {
+  if (!selectedProduct) return;
+  const rawVal = Number(document.getElementById("cartQty").value);
+
+  // If user enters more than available, show warning immediately and block Continue
+  if (rawVal > activeAvailableQty) {
+    renderQtyWarning(true);
+  } else if (rawVal <= 0) {
+    renderQtyWarning(true);
+  } else {
+    renderQtyWarning(false);
+  }
+
+  const q = Math.max(1, rawVal || 1);
+  document.getElementById("cartUnitPrice").textContent = `₹${selectedProduct.price}/${selectedProduct.unit}`;
+  document.getElementById("cartTotal").textContent = `₹${selectedProduct.price * q}`;
+  document.getElementById("cartRef").textContent = L("checkingRateMsg");
+  getGovPrice(selectedProduct.name);
+}
+
+document.getElementById("minus").onclick = () => {
+  const current = Number(document.getElementById("cartQty").value) || 1;
+  const next = Math.max(1, current - 1);
+  document.getElementById("cartQty").value = next;
+  updateCart();
 };
 
-document.getElementById("backBuyer1").onclick=()=>showBuyPane("buyStep1");
-document.getElementById("toBuyerPayment").onclick=()=>{
- const bName=(document.getElementById("buyerName")?.value||"").trim();
- const bLoc=(document.getElementById("buyerLocation")?.value||"").trim();
- if(!bName || !bLoc){
-   toast(lang==="te"?"దయచేసి మీ పేరు మరియు డెలివరీ ప్రదేశాన్ని నమోదు చేయండి.":"Please enter your name and delivery location.");
-   return;
- }
- const selectedDelivery=document.querySelector('input[name="delivery"]:checked');
- const labels={farmer_delivery:"Farmer delivery",pickup:"Customer pickup",rtc:"RTC / bus parcel"};
- document.getElementById("buyCustomer").textContent=bName;
- document.getElementById("buyLocation").textContent=bLoc;
- document.getElementById("buyFarmer").textContent=selectedProduct.farmer;
- document.getElementById("buyFarmerPhone").textContent=`📞 ${formatPhone(selectedProduct.phone)}`;
- document.getElementById("buyFarmerPhone").href=selectedProduct.phone?`tel:+${selectedProduct.phone}`:"#";
- document.getElementById("buyCrop").textContent=lang==="te"?selectedProduct.te:selectedProduct.name;
- document.getElementById("buyQty").textContent=`${document.getElementById("cartQty").value} ${selectedProduct.unit}`;
- document.getElementById("buyDelivery").textContent=labels[selectedDelivery?.value]||"Not selected";
- document.getElementById("buyTotal").textContent=`₹${selectedProduct.price*(Number(document.getElementById("cartQty").value)||1)}`;
- showBuyPane("buyStep3");
-};
-document.getElementById("backBuyer2").onclick=()=>showBuyPane("buyStep2");
-document.getElementById("confirmBuy").onclick=()=>{
- const q=Number(document.getElementById("cartQty").value)||1;
- cart.push({p:selectedProduct,q});
- document.getElementById("cartCount").textContent=cart.reduce((s,x)=>s+x.q,0);
- document.getElementById("cartBar").classList.add("show");
- showBuyPane("buySuccess");
-};
-document.getElementById("doneBuy").onclick=()=>cartModal.style.display="none";
-
-document.getElementById("checkoutCart").onclick=()=>{
- if(!cart.length)return;
- const x=cart[cart.length-1];
- selectedProduct=x.p;
- document.getElementById("cartQty").value=x.q;
- document.getElementById("cartUnit").textContent=x.p.unit;
- document.getElementById("cartUnitPrice").textContent=`₹${x.p.price}/${x.p.unit}`;
- document.getElementById("cartTotal").textContent=`₹${x.q*x.p.price}`;
- document.getElementById("cartProduct").innerHTML=`<h3>${lang==="te"?x.p.te:x.p.name}</h3><p class="intro">Quantity: ${x.q} ${x.p.unit} • Total: ₹${x.q*x.p.price}</p>`;
- showBuyPane("buyStep2");
- const phone=x.p.phone||"";
- document.getElementById("farmerPhoneText").textContent=formatPhone(phone);
- document.getElementById("farmerPhoneLink").href=phone?`tel:+${phone}`:"#";
- cartModal.style.display="grid";
+document.getElementById("plus").onclick = () => {
+  const current = Number(document.getElementById("cartQty").value) || 1;
+  if (current >= activeAvailableQty) {
+    // Cannot increase beyond available quantity
+    renderQtyWarning(true);
+    return;
+  }
+  document.getElementById("cartQty").value = current + 1;
+  updateCart();
 };
 
-/* ADMIN CHAT: text + voice transcript */
-const chat=document.getElementById("chatPanel");
-document.getElementById("chatFab").onclick=()=>chat.classList.toggle("open");
-document.getElementById("footerChat").onclick=e=>{e.preventDefault();chat.classList.add("open")};
-function sendChat(text){
- if(!text.trim())return;
- const safe=text.replace(/[<>&]/g,"");
- const box=document.getElementById("messages");
- box.insertAdjacentHTML("beforeend",`<div class="msg user">${safe}</div>`);
- document.getElementById("chatText").value="";
- box.scrollTop=box.scrollHeight;
- setTimeout(()=>{box.insertAdjacentHTML("beforeend",`<div class="msg admin">Message received. Admin reply will be connected through the backend.</div>`);box.scrollTop=box.scrollHeight},500);
+document.getElementById("cartQty").oninput = () => {
+  updateCart();
+};
+
+document.getElementById("cartQty").onchange = () => {
+  updateCart();
+};
+
+document.getElementById("closeCart").onclick = () => {
+  cartModal.style.display = "none";
+};
+
+function formatPhone(phone) {
+  if (!phone) return L("phoneNotAvailable");
+  const digits = String(phone).replace(/\D/g, "");
+  if (digits.length === 10) return `+91 ${digits.slice(0, 5)} ${digits.slice(5)}`;
+  if (digits.length === 12 && digits.startsWith("91")) return `+91 ${digits.slice(2, 7)} ${digits.slice(7)}`;
+  return `+${digits}`;
 }
-document.getElementById("sendChat").onclick=()=>sendChat(document.getElementById("chatText").value);
-document.getElementById("chatText").onkeydown=e=>{if(e.key==="Enter")document.getElementById("sendChat").click()};
-document.getElementById("chatVoice").onclick=()=>voiceInput(t=>sendChat(t));
 
+// STEP 1 -> STEP 2: Strict quantity validation on Continue click
+document.getElementById("toBuyerDelivery").onclick = () => {
+  const q = Number(document.getElementById("cartQty").value) || 0;
+
+  // Validation: must be > 0 and <= available quantity
+  if (q <= 0 || q > activeAvailableQty) {
+    renderQtyWarning(true);
+    toast(getQtyWarningMessage(activeAvailableQty, activeProductUnit));
+    return;
+  }
+
+  const phone = selectedProduct.phone || "";
+  document.getElementById("farmerPhoneText").textContent = formatPhone(phone);
+  document.getElementById("farmerPhoneLink").href = phone ? `tel:+${phone}` : "#";
+  showBuyPane("buyStep2");
+};
+
+document.getElementById("backBuyer1").onclick = () => showBuyPane("buyStep1");
+
+// STEP 2 -> STEP 3: Customer details validation
+document.getElementById("toBuyerPayment").onclick = () => {
+  const bName = (document.getElementById("buyerName")?.value || "").trim();
+  const bLoc = (document.getElementById("buyerLocation")?.value || "").trim();
+
+  if (!bName || !bLoc) {
+    toast(L("enterBuyerDetailsMsg"));
+    return;
+  }
+
+  const selectedDelivery = document.querySelector('input[name="delivery"]:checked');
+  const deliveryKey = selectedDelivery ? selectedDelivery.value : "farmer_delivery";
+  const deliveryLabel = (T[lang].deliveryLabels && T[lang].deliveryLabels[deliveryKey]) || T.en.deliveryLabels[deliveryKey] || "Delivery";
+
+  const dispCropName = lang === "te" ? (selectedProduct.te || translateCropToTelugu(selectedProduct.name)) : selectedProduct.name;
+  const qVal = Number(document.getElementById("cartQty").value) || 1;
+
+  document.getElementById("buyCustomer").textContent = bName;
+  document.getElementById("buyLocation").textContent = bLoc;
+  document.getElementById("buyFarmer").textContent = selectedProduct.farmer;
+  document.getElementById("buyFarmerPhone").textContent = `📞 ${formatPhone(selectedProduct.phone)}`;
+  document.getElementById("buyFarmerPhone").href = selectedProduct.phone ? `tel:+${selectedProduct.phone}` : "#";
+  document.getElementById("buyCrop").textContent = dispCropName;
+  document.getElementById("buyQty").textContent = `${qVal} ${selectedProduct.unit}`;
+  document.getElementById("buyDelivery").textContent = deliveryLabel;
+  document.getElementById("buyTotal").textContent = `₹${selectedProduct.price * qVal}`;
+
+  showBuyPane("buyStep3");
+};
+
+document.getElementById("backBuyer2").onclick = () => showBuyPane("buyStep2");
+
+// STEP 3 -> SUCCESS
+document.getElementById("confirmBuy").onclick = () => {
+  const q = Number(document.getElementById("cartQty").value) || 1;
+  cart.push({ p: selectedProduct, q });
+  document.getElementById("cartCount").textContent = cart.reduce((s, x) => s + x.q, 0);
+  document.getElementById("cartBar").classList.add("show");
+  showBuyPane("buySuccess");
+};
+
+document.getElementById("doneBuy").onclick = () => {
+  cartModal.style.display = "none";
+};
+
+document.getElementById("checkoutCart").onclick = () => {
+  if (!cart.length) return;
+  const x = cart[cart.length - 1];
+  selectedProduct = x.p;
+  const parsed = parseProductQuantity(x.p.qty);
+  activeAvailableQty = parsed.num;
+  activeProductUnit = parsed.unit || x.p.unit || "kg";
+
+  document.getElementById("cartQty").value = x.q;
+  document.getElementById("cartUnit").textContent = x.p.unit;
+  document.getElementById("cartUnitPrice").textContent = `₹${x.p.price}/${x.p.unit}`;
+  document.getElementById("cartTotal").textContent = `₹${x.q * x.p.price}`;
+
+  const dispName = lang === "te" ? (x.p.te || translateCropToTelugu(x.p.name)) : x.p.name;
+  document.getElementById("cartProduct").innerHTML = `
+    <h3>${dispName}</h3>
+    <p class="intro">${L("lblQuantity")}: ${x.q} ${x.p.unit} • ${L("lblTotal")}: ₹${x.q * x.p.price}</p>`;
+
+  showBuyPane("buyStep2");
+  const phone = x.p.phone || "";
+  document.getElementById("farmerPhoneText").textContent = formatPhone(phone);
+  document.getElementById("farmerPhoneLink").href = phone ? `tel:+${phone}` : "#";
+  cartModal.style.display = "grid";
+};
+
+/* ADMIN CHAT */
+const chat = document.getElementById("chatPanel");
+document.getElementById("chatFab").onclick = () => chat.classList.toggle("open");
+document.getElementById("footerChat").onclick = e => {
+  e.preventDefault();
+  chat.classList.add("open");
+};
+
+function sendChat(text) {
+  if (!text.trim()) return;
+  const safe = text.replace(/[<>&]/g, "");
+  const box = document.getElementById("messages");
+  box.insertAdjacentHTML("beforeend", `<div class="msg user">${safe}</div>`);
+  document.getElementById("chatText").value = "";
+  box.scrollTop = box.scrollHeight;
+  setTimeout(() => {
+    box.insertAdjacentHTML("beforeend", `<div class="msg admin">${L("chatReply")}</div>`);
+    box.scrollTop = box.scrollHeight;
+  }, 500);
+}
+
+document.getElementById("sendChat").onclick = () => sendChat(document.getElementById("chatText").value);
+document.getElementById("chatText").onkeydown = e => {
+  if (e.key === "Enter") document.getElementById("sendChat").click();
+};
+document.getElementById("chatVoice").onclick = () => voiceInput(t => sendChat(t));
+
+// Initialize language & load products
+setLanguage();
 render();
 loadProductsFromSupabase();
 </script>
