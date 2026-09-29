@@ -7,6 +7,7 @@ const PORT = process.env.PORT || 3000;
 
 app.use(cors());
 app.use(express.json());
+app.use(express.static(__dirname));
 
 // Reference fallback rates (₹/kg) when external government API is slow or API key is not configured yet
 const FALLBACK_PRICES = {
